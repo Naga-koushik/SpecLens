@@ -1,0 +1,62 @@
+{
+  "manufacturer": "Apple",
+  "total": 125,
+  "page": 1,
+  "page_size": 10,
+  "total_pages": 13,
+  "has_next": true,
+  "has_previous": false,
+  "devices": [
+    {
+      "id": 43,
+      "name": "Apple iPhone 15 Pro",
+      "manufacturer": {
+        "id": 6,
+        "name": "Apple",
+        "website_url": "https://www.apple.com/"
+      },
+      "image_b64": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='240' viewBox='0 0 160 240'><rect width='160' height='240' rx='24' fill='%231f2937'/><rect x='10' y='10' width='140' height='220' rx='16' fill='%23111827'/><circle cx='80' cy='22' r='4' fill='%234b5563'/><rect x='50' y='190' width='60' height='4' rx='2' fill='%239ca3af'/></svg>",
+      "description": "Apple iPhone 15 Pro smartphone. Released 2023, September.",
+      "colors": "Natural Titanium, Blue Titanium, White Titanium, Black Titanium",
+      "storage": "128GB, 256GB, 512GB, 1TB",
+      "screen_resolution": "6.1\", 1179x2556 pixels",
+      "camera": "48 MP + 12 MP + 12 MP",
+      "battery_capacity": "3274 mAh",
+      "hardware": "Apple A17 Pro, 8GB RAM"
+    },
+    {
+      "id": 44,
+      "name": "Apple iPhone 15",
+      "manufacturer": {
+        "id": 6,
+        "name": "Apple",
+        "website_url": "https://www.apple.com/"
+      },
+      "image_b64": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='240' viewBox='0 0 160 240'><rect width='160' height='240' rx='24' fill='%23374151'/><rect x='10' y='10' width='140' height='220' rx='16' fill='%23111827'/><circle cx='80' cy='22' r='4' fill='%236b7280'/><rect x='50' y='190' width='60' height='4' rx='2' fill='%239ca3af'/></svg>",
+      "description": "Apple iPhone 15 smartphone. Released 2023, September.",
+      "colors": "Black, Blue, Green, Yellow, Pink",
+      "storage": "128GB, 256GB, 512GB",
+      "screen_resolution": "6.1\", 1179x2556 pixels",
+      "camera": "48 MP + 12 MP",
+      "battery_capacity": "3349 mAh",
+      "hardware": "Apple A16 Bionic, 6GB RAM"
+    },
+    {
+      "id": 45,
+      "name": "Apple iPhone 15 Pro Max",
+      "manufacturer": {
+        "id": 6,
+        "name": "Apple",
+        "website_url": "https://www.apple.com/"
+      },
+      "image_b64": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='240' viewBox='0 0 160 240'><rect width='160' height='240' rx='24' fill='%231f2937'/><rect x='10' y='10' width='140' height='220' rx='16' fill='%23111827'/><circle cx='80' cy='22' r='4' fill='%234b5563'/><rect x='50' y='190' width='60' height='4' rx='2' fill='%239ca3af'/></svg>",
+      "description": "Apple iPhone 15 Pro Max smartphone. Released 2023, September.",
+      "colors": "Natural Titanium, Blue Titanium, White Titanium, Black Titanium",
+      "storage": "256GB, 512GB, 1TB",
+      "screen_resolution": "6.7\", 1290x2796 pixels",
+      "camera": "48 MP + 12 MP + 12 MP",
+      "battery_capacity": "4422 mAh",
+      "hardware": "Apple A17 Pro, 8GB RAM"
+    }
+  ]
+}

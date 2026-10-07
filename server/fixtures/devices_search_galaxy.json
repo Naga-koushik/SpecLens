@@ -1,0 +1,50 @@
+{
+  "total": 24,
+  "page": 1,
+  "page_size": 10,
+  "total_pages": 3,
+  "has_next": true,
+  "has_previous": false,
+  "devices": [
+    {
+      "id": 123,
+      "match_certainty": "100.00%",
+      "match_type": "exact_model",
+      "name": "Samsung Galaxy S24 Ultra",
+      "image_b64": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='240' viewBox='0 0 160 240'><rect width='160' height='240' rx='16' fill='%231e293b'/><rect x='8' y='8' width='144' height='224' rx='12' fill='%230f172a'/><circle cx='80' cy='20' r='3.5' fill='%2338bdf8'/><rect x='45' y='210' width='70' height='3' rx='1.5' fill='%2364748b'/></svg>",
+      "manufacturer_name": "Samsung",
+      "device_type": "phone",
+      "description": "Samsung Galaxy S24 Ultra Android smartphone. Announced Jan 2024. Features 6.8\" Dynamic LTPO AMOLED 2X display, Snapdragon 8 Gen 3 chipset, 5000 mAh battery, 1000 GB storage, 12 GB RAM, Titanium frame, S-Pen.",
+      "colors": "Titanium Black, Titanium Gray, Titanium Violet, Titanium Yellow",
+      "storage": "256GB, 512GB, 1TB",
+      "screen_resolution": "6.8\", 1440x3120 pixels",
+      "weight": "232g",
+      "thickness": "8.6mm",
+      "release_date": "Released 2024, January 24",
+      "camera": "200MP + 50MP + 10MP + 12MP",
+      "battery_capacity": "5000 mAh",
+      "hardware": "12GB RAM, Snapdragon 8 Gen 3",
+      "model_numbers": "SM-S928B, SM-S928U, SM-S928W"
+    },
+    {
+      "id": 124,
+      "match_certainty": "98.50%",
+      "match_type": "name",
+      "name": "Samsung Galaxy S24",
+      "image_b64": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='240' viewBox='0 0 160 240'><rect width='160' height='240' rx='20' fill='%23334155'/><rect x='10' y='10' width='140' height='220' rx='16' fill='%230f172a'/><circle cx='80' cy='20' r='3.5' fill='%2338bdf8'/><rect x='50' y='210' width='60' height='3' rx='1.5' fill='%2364748b'/></svg>",
+      "manufacturer_name": "Samsung",
+      "device_type": "phone",
+      "description": "Samsung Galaxy S24 Android smartphone. Announced Jan 2024. Features 6.2\" Dynamic LTPO AMOLED 2X display, Exynos 2400 / Snapdragon 8 Gen 3, 4000 mAh battery, 512 GB storage, 8 GB RAM.",
+      "colors": "Onyx Black, Marble Grey, Cobalt Violet, Amber Yellow",
+      "storage": "128GB, 256GB, 512GB",
+      "screen_resolution": "6.2\", 1080x2340 pixels",
+      "weight": "167g",
+      "thickness": "7.6mm",
+      "release_date": "Released 2024, January 24",
+      "camera": "50MP + 10MP + 12MP",
+      "battery_capacity": "4000 mAh",
+      "hardware": "8GB RAM, Exynos 2400 / Snapdragon 8 Gen 3",
+      "model_numbers": "SM-S921B, SM-S921U"
+    }
+  ]
+}

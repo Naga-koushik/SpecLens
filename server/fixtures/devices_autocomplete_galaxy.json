@@ -1,0 +1,26 @@
+[
+  {
+    "id": 123,
+    "name": "Galaxy S24 Ultra",
+    "brand": "Samsung",
+    "full_name": "Samsung Galaxy S24 Ultra"
+  },
+  {
+    "id": 124,
+    "name": "Galaxy S24",
+    "brand": "Samsung",
+    "full_name": "Samsung Galaxy S24"
+  },
+  {
+    "id": 125,
+    "name": "Galaxy S24+",
+    "brand": "Samsung",
+    "full_name": "Samsung Galaxy S24+"
+  },
+  {
+    "id": 120,
+    "name": "Galaxy S23 Ultra",
+    "brand": "Samsung",
+    "full_name": "Samsung Galaxy S23 Ultra"
+  }
+]

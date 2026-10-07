@@ -1,0 +1,50 @@
+{
+  "total": 124,
+  "page": 1,
+  "page_size": 10,
+  "total_pages": 13,
+  "has_next": true,
+  "has_previous": false,
+  "manufacturers": [
+    {
+      "id": 6,
+      "name": "Apple",
+      "website_url": "https://www.apple.com/"
+    },
+    {
+      "id": 93,
+      "name": "Samsung",
+      "website_url": "https://www.samsung.com"
+    },
+    {
+      "id": 36,
+      "name": "Google",
+      "website_url": "https://www.google.com"
+    },
+    {
+      "id": 119,
+      "name": "Xiaomi",
+      "website_url": "https://www.mi.com"
+    },
+    {
+      "id": 80,
+      "name": "OnePlus",
+      "website_url": "https://www.oneplus.com"
+    },
+    {
+      "id": 42,
+      "name": "Huawei",
+      "website_url": "https://www.huawei.com"
+    },
+    {
+      "id": 107,
+      "name": "Sony",
+      "website_url": "https://www.sony.com"
+    },
+    {
+      "id": 78,
+      "name": "Motorola",
+      "website_url": "https://www.motorola.com"
+    }
+  ]
+}

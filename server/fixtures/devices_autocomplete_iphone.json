@@ -1,0 +1,32 @@
+[
+  {
+    "id": 43,
+    "name": "iPhone 15 Pro",
+    "brand": "Apple",
+    "full_name": "Apple iPhone 15 Pro"
+  },
+  {
+    "id": 44,
+    "name": "iPhone 15",
+    "brand": "Apple",
+    "full_name": "Apple iPhone 15"
+  },
+  {
+    "id": 45,
+    "name": "iPhone 15 Pro Max",
+    "brand": "Apple",
+    "full_name": "Apple iPhone 15 Pro Max"
+  },
+  {
+    "id": 46,
+    "name": "iPhone 15 Plus",
+    "brand": "Apple",
+    "full_name": "Apple iPhone 15 Plus"
+  },
+  {
+    "id": 41,
+    "name": "iPhone 14 Pro",
+    "brand": "Apple",
+    "full_name": "Apple iPhone 14 Pro"
+  }
+]
