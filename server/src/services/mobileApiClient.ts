@@ -181,25 +181,54 @@ class MobileApiClient {
   }
 
   /**
-   * Get brand manufacturers list.
+   * Get brand manufacturers list following bounded pagination (up to 5 pages).
    */
   async getBrands(): Promise<Brand[]> {
     if (this.isMockMode) {
       return MOCK_BRANDS;
     }
 
-    const data = await this.fetchUpstream<{
-      manufacturers: Array<{ id: number; name: string }>;
-    }>('/manufacturers/?page=1&limit=30');
+    const allManufacturers: Array<{ id: number; name: string }> = [];
+    const MAX_PAGES = 5;
+    let currentPage = 1;
+    let hasMore = true;
 
-    if (!data.manufacturers || !Array.isArray(data.manufacturers)) {
-      return [];
+    while (currentPage <= MAX_PAGES && hasMore) {
+      const data = await this.fetchUpstream<{
+        manufacturers?: Array<{ id: number; name: string }>;
+        has_next?: boolean;
+        total_pages?: number;
+        page?: number;
+      }>(`/manufacturers/?page=${currentPage}&limit=30`);
+
+      if (data.manufacturers && Array.isArray(data.manufacturers)) {
+        allManufacturers.push(...data.manufacturers);
+      }
+
+      if (data.has_next === false || (data.total_pages && currentPage >= data.total_pages)) {
+        hasMore = false;
+      } else if (!data.manufacturers || data.manufacturers.length < 30) {
+        hasMore = false;
+      } else {
+        currentPage++;
+      }
     }
 
-    return data.manufacturers.map((m) => ({
-      name: m.name,
-      slug: m.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-    }));
+    const seen = new Set<string>();
+    const brands: Brand[] = [];
+    for (const m of allManufacturers) {
+      if (!m.name) continue;
+      const slug = m.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      if (!seen.has(slug)) {
+        seen.add(slug);
+        brands.push({
+          name: m.name,
+          slug
+        });
+      }
+    }
+
+    return brands;
   }
 
   /**
