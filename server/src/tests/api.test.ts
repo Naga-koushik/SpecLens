@@ -117,4 +117,11 @@ describe('Server API Endpoints', () => {
     expect(secondRes.status).toBe(200);
     expect(secondRes.body).toHaveProperty('id', 43);
   });
+
+  it('Resolves complex brand slugs like OnePlus correctly', async () => {
+    const res = await request(app).get('/api/brands/oneplus?page=1');
+    expect(res.status).toBe(200);
+    expect(res.body.brand).toBe('OnePlus');
+    expect(res.body.results.length).toBeGreaterThan(0);
+  });
 });

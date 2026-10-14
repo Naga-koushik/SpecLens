@@ -3,12 +3,22 @@ import { Phone, PhoneSummary, Brand, AutocompleteSuggestion } from '../types/ind
 import { MOCK_PHONES, MOCK_BRANDS, POPULAR_PHONE_NAMES } from '../fixtures/mockData.js';
 import { normalizePhone, normalizePhoneSummary } from '../normalizers/phoneNormalizer.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { cache } from './cache.js';
 
 const BASE_URL = 'https://api.mobileapi.dev';
 export const UPSTREAM_TIMEOUT_MS = 8000;
 
 class MobileApiClient {
+  private mockModeOverride: boolean | null = null;
+
+  public setMockModeOverride(override: boolean | null): void {
+    this.mockModeOverride = override;
+  }
+
   private get isMockMode(): boolean {
+    if (this.mockModeOverride !== null) {
+      return this.mockModeOverride;
+    }
     return env.NODE_ENV === 'test' || env.USE_MOCK || !env.MOBILEAPI_KEY;
   }
 
@@ -219,7 +229,20 @@ class MobileApiClient {
       };
     }
 
-    const brandName = brandSlug.charAt(0).toUpperCase() + brandSlug.slice(1);
+    let brandName = brandSlug;
+    try {
+      const cached = cache.getBrands<Brand[]>('all_brands');
+      const brands = cached || (await this.getBrands());
+      const brandMatch = brands.find(
+        (b) => b.slug.toLowerCase() === brandSlug.toLowerCase() || b.name.toLowerCase() === brandSlug.toLowerCase()
+      );
+      if (brandMatch) {
+        brandName = brandMatch.name;
+      }
+    } catch {
+      // Fall back to slug only if not found
+    }
+
     const data = await this.fetchUpstream<{
       manufacturer: string;
       total: number;
