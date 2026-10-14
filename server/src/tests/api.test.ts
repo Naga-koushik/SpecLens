@@ -103,6 +103,19 @@ describe('Server API Endpoints', () => {
     expect(res.body.error.code).toBe('INVALID_INPUT');
   });
 
+  it('GET /api/compare returns 404 NOT_FOUND when none of the phones are found', async () => {
+    const res = await request(app).get('/api/compare?ids=999991,999992');
+    expect(res.status).toBe(404);
+    expect(res.body.error.code).toBe('NOT_FOUND');
+  });
+
+  it('GET /api/compare preserves missing[] on partial failure', async () => {
+    const res = await request(app).get('/api/compare?ids=43,999991');
+    expect(res.status).toBe(200);
+    expect(res.body.phones.length).toBe(1);
+    expect(res.body.missing).toEqual(['999991']);
+  });
+
   it('Caches detail lookup on second request', async () => {
     const spy = cache.getDetail('43');
     expect(spy).toBeUndefined();

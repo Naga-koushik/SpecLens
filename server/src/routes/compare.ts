@@ -60,6 +60,10 @@ router.get('/compare', async (req: Request, res: Response, next: NextFunction) =
       }
     }
 
+    if (phones.length === 0) {
+      throw new AppError('NOT_FOUND', 'None of the requested phones could be found for comparison', 404);
+    }
+
     const response: CompareResponse = {
       phones,
       missing
