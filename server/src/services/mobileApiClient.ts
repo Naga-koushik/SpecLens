@@ -5,7 +5,7 @@ import { normalizePhone, normalizePhoneSummary } from '../normalizers/phoneNorma
 import { AppError } from '../middleware/errorHandler.js';
 
 const BASE_URL = 'https://api.mobileapi.dev';
-const UPSTREAM_TIMEOUT_MS = 15000;
+export const UPSTREAM_TIMEOUT_MS = 8000;
 
 class MobileApiClient {
   private get isMockMode(): boolean {
@@ -49,7 +49,7 @@ class MobileApiClient {
       clearTimeout(timeoutId);
       if (err instanceof AppError) throw err;
       if (err.name === 'AbortError') {
-        throw new AppError('UPSTREAM_TIMEOUT', 'Upstream request timed out after 8s', 504);
+        throw new AppError('UPSTREAM_TIMEOUT', `Upstream request timed out after ${UPSTREAM_TIMEOUT_MS / 1000}s`, 504);
       }
       throw new AppError('UPSTREAM_UNAVAILABLE', 'Failed to communicate with external provider', 502);
     }
