@@ -6,12 +6,14 @@ interface ComparisonRowProps {
   row: ComparisonRowItem;
   phones: Phone[];
   showDifferencesOnly: boolean;
+  canAddMore?: boolean;
 }
 
 export const ComparisonRow: React.FC<ComparisonRowProps> = ({
   row,
   phones,
-  showDifferencesOnly
+  showDifferencesOnly,
+  canAddMore = false
 }) => {
   if (showDifferencesOnly && !row.isDifferent) {
     return null;
@@ -20,13 +22,15 @@ export const ComparisonRow: React.FC<ComparisonRowProps> = ({
   return (
     <tr
       className={`border-b border-slate-100 transition-colors ${
-        row.isDifferent ? 'bg-amber-50/50 hover:bg-amber-50' : 'hover:bg-slate-50/70'
+        row.isDifferent ? 'bg-amber-50/60 hover:bg-amber-100/50' : 'hover:bg-slate-50/70'
       }`}
     >
-      {/* Sticky Spec Label Header */}
+      {/* Sticky Spec Label Header - solid background prevents bleed-through on horizontal scroll */}
       <th
         scope="row"
-        className="sticky left-0 z-10 bg-inherit py-3.5 px-4 text-left text-xs font-semibold text-slate-700 min-w-[160px] max-w-[200px] border-r border-slate-200 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]"
+        className={`sticky left-0 z-10 ${
+          row.isDifferent ? 'bg-amber-50' : 'bg-white'
+        } py-3.5 px-4 text-left text-xs font-semibold text-slate-700 min-w-[160px] max-w-[200px] border-r border-slate-200 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]`}
       >
         <div className="flex flex-col gap-1">
           <span>{row.label}</span>
@@ -59,6 +63,14 @@ export const ComparisonRow: React.FC<ComparisonRowProps> = ({
           </td>
         );
       })}
+
+      {/* Matching column cell for add phone button header column */}
+      {canAddMore && (
+        <td
+          className="p-3 bg-slate-50/20 border-l border-dashed border-slate-200"
+          aria-hidden="true"
+        />
+      )}
     </tr>
   );
 };

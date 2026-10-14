@@ -44,8 +44,8 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/compare?ids=43,123" className="hover:text-emerald-600 transition-colors">
-                  Compare Flagships
+                <Link to="/compare" className="hover:text-emerald-600 transition-colors">
+                  Compare Smartphones
                 </Link>
               </li>
               <li>

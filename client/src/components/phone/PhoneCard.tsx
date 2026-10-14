@@ -47,10 +47,10 @@ export const PhoneCard: React.FC<PhoneCardProps> = ({
       newIds = [...existingIds, stringId];
     }
 
-    if (newIds.length >= 2) {
+    if (newIds.length > 0) {
       navigate(`/compare?ids=${newIds.join(',')}`);
     } else {
-      navigate(`/compare?ids=${newIds.join(',')}`);
+      navigate('/compare');
     }
   };
 

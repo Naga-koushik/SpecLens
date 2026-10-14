@@ -78,8 +78,25 @@ export function normalizePhone(raw: any): Phone {
     brand = cleanString(raw.manufacturer.name) ?? brand;
   }
 
-  // Resolve Image
-  let image = cleanString(raw.image ?? raw.image_b64 ?? raw.main_image_b64 ?? raw.thumbnail);
+  // Resolve Image (support image, image_url, thumbnail, base64)
+  const rawImage = cleanString(
+    raw.image ??
+    raw.image_url ??
+    raw.thumbnail ??
+    raw.image_b64 ??
+    raw.main_image_b64
+  );
+
+  let image: string | null = null;
+  if (rawImage) {
+    if (rawImage.startsWith('http://') || rawImage.startsWith('https://') || rawImage.startsWith('data:image/')) {
+      image = rawImage;
+    } else if (/^[A-Za-z0-9+/=]+$/.test(rawImage.replace(/\s+/g, ''))) {
+      image = `data:image/jpeg;base64,${rawImage.trim()}`;
+    } else {
+      image = rawImage;
+    }
+  }
 
   // Release Date
   const releaseDate = cleanString(raw.releaseDate ?? raw.release_date);

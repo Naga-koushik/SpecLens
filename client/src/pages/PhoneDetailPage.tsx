@@ -50,8 +50,7 @@ export const PhoneDetailPage: React.FC = () => {
   const handleCompareClick = () => {
     if (!phone) return;
     setIsAddedToCompare(true);
-    // Navigate with a second phone pre-selected (or compare page)
-    navigate(`/compare?ids=${phone.id},123`);
+    navigate(`/compare?ids=${phone.id}`);
   };
 
   if (isLoading) {
@@ -163,11 +162,11 @@ export const PhoneDetailPage: React.FC = () => {
                 )}
               </button>
               <Link
-                to={`/compare?ids=${phone.id},123`}
+                to={`/compare?ids=${phone.id}`}
                 className="min-h-[44px] inline-flex items-center gap-2 px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-slate-400"
               >
                 <Scale className="w-4 h-4" />
-                <span>Compare vs S24 Ultra</span>
+                <span>Compare Side-by-Side</span>
               </Link>
             </div>
           </div>

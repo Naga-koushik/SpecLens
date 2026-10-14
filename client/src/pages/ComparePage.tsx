@@ -5,7 +5,7 @@ import { ComparisonTable } from '../components/compare/ComparisonTable';
 import { PhoneSelectorModal } from '../components/compare/PhoneSelectorModal';
 import { ComparisonTableSkeleton } from '../components/common/Skeleton';
 import { ErrorState } from '../components/common/ErrorState';
-import { Scale, Plus, Sparkles } from 'lucide-react';
+import { Scale, Plus, Sparkles, AlertCircle } from 'lucide-react';
 
 export const ComparePage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -134,8 +134,36 @@ export const ComparePage: React.FC = () => {
         />
       )}
 
+      {/* Missing Devices Warning Banner */}
+      {ids.length >= 2 && !isLoading && !isError && data?.missing && data.missing.length > 0 && (
+        <div className="bg-amber-50 border border-amber-200 text-amber-900 rounded-2xl p-4 flex items-center gap-3">
+          <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
+          <div className="text-sm">
+            <span className="font-semibold">Some devices could not be loaded:</span>{' '}
+            Device ID(s) {data.missing.join(', ')} were not found or are currently unavailable.
+          </div>
+        </div>
+      )}
+
+      {/* State: Insufficient valid phones returned */}
+      {ids.length >= 2 && !isLoading && !isError && data && data.phones.length < 2 && (
+        <div className="bg-white rounded-3xl border border-slate-200/90 p-8 text-center max-w-xl mx-auto shadow-sm">
+          <h3 className="text-lg font-bold text-slate-900 mb-2">Insufficient Devices for Comparison</h3>
+          <p className="text-sm text-slate-600 mb-6">
+            Only {data.phones.length} of the requested smartphones could be retrieved. Please add another device to view the comparison table.
+          </p>
+          <button
+            onClick={() => setIsSelectorOpen(true)}
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl shadow-sm transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add a Smartphone</span>
+          </button>
+        </div>
+      )}
+
       {/* Comparison Table */}
-      {ids.length >= 2 && !isLoading && !isError && data && (
+      {ids.length >= 2 && !isLoading && !isError && data && data.phones.length >= 2 && (
         <ComparisonTable
           phones={data.phones}
           onRemovePhone={handleRemovePhone}

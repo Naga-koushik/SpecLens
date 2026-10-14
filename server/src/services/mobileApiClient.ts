@@ -5,13 +5,11 @@ import { normalizePhone, normalizePhoneSummary } from '../normalizers/phoneNorma
 import { AppError } from '../middleware/errorHandler.js';
 
 const BASE_URL = 'https://api.mobileapi.dev';
-const UPSTREAM_TIMEOUT_MS = 8000;
+const UPSTREAM_TIMEOUT_MS = 15000;
 
 class MobileApiClient {
-  private isMockMode: boolean;
-
-  constructor() {
-    this.isMockMode = env.USE_MOCK || !env.MOBILEAPI_KEY;
+  private get isMockMode(): boolean {
+    return env.NODE_ENV === 'test' || env.USE_MOCK || !env.MOBILEAPI_KEY;
   }
 
   /**
@@ -139,19 +137,21 @@ class MobileApiClient {
       return popular.map((p) => normalizePhoneSummary(p));
     }
 
-    // In real mode, look up the curated names
-    const results: PhoneSummary[] = [];
-    for (const name of POPULAR_PHONE_NAMES.slice(0, 6)) {
-      try {
-        const search = await this.searchPhones(name, 1, 1);
-        if (search.results[0]) {
-          results.push(search.results[0]);
-        }
-      } catch {
-        // Continue if single phone lookup fails
+    // In real mode, fetch devices in a single call to protect request quota (5 req/min free tier)
+    try {
+      const data = await this.fetchUpstream<{ devices: any[] }>('/devices/?page=1&limit=6');
+      if (data && Array.isArray(data.devices) && data.devices.length > 0) {
+        return data.devices.map((d) => normalizePhoneSummary(d));
       }
+    } catch {
+      // Fallback if upstream device list is unreachable or throttled
     }
-    return results;
+
+    // Secondary fallback to curated mock phones so the home page never renders blank
+    const fallbackPopular = MOCK_PHONES.filter((p) =>
+      POPULAR_PHONE_NAMES.some((name) => p.name.toLowerCase().includes(name.toLowerCase()))
+    ).slice(0, 6);
+    return fallbackPopular.map((p) => normalizePhoneSummary(p));
   }
 
   /**

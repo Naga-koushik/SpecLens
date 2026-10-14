@@ -14,7 +14,7 @@ export const Navbar: React.FC = () => {
     .filter(Boolean);
   const compareCount = compareIds.length;
 
-  const compareUrl = compareCount >= 2 ? `/compare?ids=${compareIds.join(',')}` : '/compare?ids=43,123';
+  const compareUrl = compareCount > 0 ? `/compare?ids=${compareIds.join(',')}` : '/compare';
 
   return (
     <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80">

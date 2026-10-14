@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Search, Smartphone, Plus } from 'lucide-react';
 import { usePhoneSearch } from '../../hooks/usePhoneSearch';
 import { usePopularPhones } from '../../hooks/usePopularPhones';
+import { useDebounce } from '../../hooks/useDebounce';
 import { PhoneSummary } from '../../types';
 
 interface PhoneSelectorModalProps {
@@ -18,14 +19,15 @@ export const PhoneSelectorModal: React.FC<PhoneSelectorModalProps> = ({
   existingIds
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { data: searchData, isLoading: isSearching } = usePhoneSearch(searchTerm);
+  const debouncedTerm = useDebounce(searchTerm, 350);
+  const { data: searchData, isLoading: isSearching } = usePhoneSearch(debouncedTerm);
   const { data: popularPhones = [], isLoading: isPopularLoading } = usePopularPhones();
 
   if (!isOpen) return null;
 
   const existingSet = new Set(existingIds.map(String));
 
-  const displayedPhones = searchTerm.trim().length >= 2
+  const displayedPhones = debouncedTerm.trim().length >= 2
     ? (searchData?.results || []).filter((p) => !existingSet.has(String(p.id)))
     : popularPhones.filter((p) => !existingSet.has(String(p.id)));
 
@@ -80,8 +82,17 @@ export const PhoneSelectorModal: React.FC<PhoneSelectorModalProps> = ({
                 className="pt-2 first:pt-0 flex items-center justify-between p-2.5 rounded-xl hover:bg-emerald-50/60 cursor-pointer transition-colors group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center shrink-0">
-                    <Smartphone className="w-5 h-5 text-slate-500" />
+                  <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
+                    {phone.thumbnail ? (
+                      <img
+                        src={phone.thumbnail}
+                        alt=""
+                        className="w-full h-full object-contain p-1"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <Smartphone className="w-5 h-5 text-slate-500" />
+                    )}
                   </div>
                   <div>
                     <h4 className="text-sm font-semibold text-slate-900 group-hover:text-emerald-800 transition-colors">

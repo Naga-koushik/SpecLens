@@ -111,15 +111,14 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({
                 >
                   <div className="flex flex-col items-center text-center p-2 relative group">
                     {/* Remove Button */}
-                    {phones.length > 2 && (
-                      <button
-                        onClick={() => onRemovePhone(phone.id)}
-                        aria-label={`Remove ${phone.name} from comparison`}
-                        className="absolute -top-1 -right-1 p-1 bg-slate-100 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-full transition-colors"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    )}
+                    <button
+                      onClick={() => onRemovePhone(phone.id)}
+                      aria-label={`Remove ${phone.name} from comparison`}
+                      className="absolute -top-1 -right-1 p-1 bg-slate-100 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-full transition-colors z-10"
+                      title={`Remove ${phone.name}`}
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
 
                     {/* Image */}
                     <Link to={`/phones/${phone.id}`} className="w-24 h-32 mb-2 flex items-center justify-center">
@@ -195,6 +194,7 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({
                       row={row}
                       phones={phones}
                       showDifferencesOnly={showDifferencesOnly}
+                      canAddMore={canAddMore}
                     />
                   ))}
                 </React.Fragment>
