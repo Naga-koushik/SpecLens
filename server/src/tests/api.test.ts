@@ -66,6 +66,18 @@ describe('Server API Endpoints', () => {
     expect(res.body.error.code).toBe('NOT_FOUND');
   });
 
+  it('GET /api/phones/:id rejects non-numeric or malformed ID with 400 INVALID_INPUT', async () => {
+    const res = await request(app).get('/api/phones/notanumber');
+    expect(res.status).toBe(400);
+    expect(res.body.error.code).toBe('INVALID_INPUT');
+  });
+
+  it('GET /api/compare rejects non-numeric ID with 400 INVALID_INPUT', async () => {
+    const res = await request(app).get('/api/compare?ids=43,invalid_id');
+    expect(res.status).toBe(400);
+    expect(res.body.error.code).toBe('INVALID_INPUT');
+  });
+
   it('GET /api/brands returns manufacturers list', async () => {
     const res = await request(app).get('/api/brands');
     expect(res.status).toBe(200);

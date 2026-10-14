@@ -108,15 +108,22 @@ router.get('/phones/popular', async (_req: Request, res: Response, next: NextFun
   }
 });
 
+const phoneIdParamSchema = z
+  .string()
+  .trim()
+  .regex(/^\d{1,12}$/, 'Phone ID must be numeric with up to 12 digits');
+
 /**
  * GET /api/phones/:id
  */
 router.get('/phones/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id } = req.params;
-    if (!id || id.trim() === '') {
-      throw new AppError('INVALID_INPUT', 'Phone ID is required', 400);
+    const parseResult = phoneIdParamSchema.safeParse(req.params.id);
+    if (!parseResult.success) {
+      throw new AppError('INVALID_INPUT', parseResult.error.errors[0]?.message || 'Invalid phone ID', 400);
     }
+
+    const id = parseResult.data;
 
     const cached = cache.getDetail<any>(id);
     if (cached) {

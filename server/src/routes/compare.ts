@@ -1,10 +1,16 @@
 import { Router, Request, Response, NextFunction } from 'express';
+import { z } from 'zod';
 import { mobileApiClient } from '../services/mobileApiClient.js';
 import { cache } from '../services/cache.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { Phone, CompareResponse } from '../types/index.js';
 
 const router = Router();
+
+const compareIdItemSchema = z
+  .string()
+  .trim()
+  .regex(/^\d{1,12}$/, 'Phone ID must be numeric with up to 12 digits');
 
 /**
  * GET /api/compare?ids=1,2,3
@@ -27,6 +33,14 @@ router.get('/compare', async (req: Request, res: Response, next: NextFunction) =
 
     if (uniqueIds.length < 2 || uniqueIds.length > 4) {
       throw new AppError('INVALID_INPUT', 'Comparison requires between 2 and 4 distinct phone IDs', 400);
+    }
+
+    // Validate each ID
+    for (const id of uniqueIds) {
+      const parsed = compareIdItemSchema.safeParse(id);
+      if (!parsed.success) {
+        throw new AppError('INVALID_INPUT', `Invalid ID "${id}": IDs must be numeric with up to 12 digits`, 400);
+      }
     }
 
     const phones: Phone[] = [];
