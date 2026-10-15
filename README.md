@@ -23,11 +23,12 @@ Built as an academic capstone project, SpecLens features a decoupled full-stack 
 └──────────────┬───────────────────────────────┬──────────────┘
                │ (Mock Mode: USE_MOCK=true)    │ (Live Mode)
                ▼                               ▼
-     ┌──────────────────┐            ┌───────────────────┐
-     │  Local Fixtures  │            │   MobileAPI.dev   │
-     │  14 Real Phones  │            │  External REST    │
-     │  6 Major Brands  │            │  (Protected Key)  │
-     └──────────────────┘            └───────────────────┘
+     ┌────────────────────────┐      ┌───────────────────┐
+     │     Local Fixtures     │      │   MobileAPI.dev   │
+     │  14 Curated Phones     │      │  External REST    │
+     │ (Specs + Placeholders) │      │  (Protected Key)  │
+     │  6 Major Brands        │      │                   │
+     └────────────────────────┘      └───────────────────┘
 ```
 
 ---
@@ -121,7 +122,7 @@ npm run dev
 
 - **Mock Mode (Default & Recommended for Evaluation)**:
   `USE_MOCK=true` in `server/.env`.
-  Runs against a curated dataset of 14 phones from Apple, Samsung, Google, OnePlus, Xiaomi, and Motorola with intentional null values to test edge cases.
+  Runs against a curated dataset of 14 phones (comprising real specs plus generated placeholder images) from Apple, Samsung, Google, OnePlus, Xiaomi, and Motorola with intentional null values to test edge cases.
 - **Live Mode**:
   Set your MobileAPI.dev key in `server/.env`:
   ```env
