@@ -1,4 +1,5 @@
 import React from 'react';
+import { GlossaryTerm } from '../common/GlossaryTerm';
 
 export interface SpecItem {
   label: string;
@@ -30,7 +31,7 @@ export const SpecSection: React.FC<SpecSectionProps> = ({ title, icon, items }) 
           return (
             <div key={idx} className="flex flex-col sm:flex-row sm:justify-between py-1.5 border-b border-slate-50 last:border-0">
               <dt className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-0.5 sm:mb-0 sm:w-1/3">
-                {item.label}
+                <GlossaryTerm term={item.label} />
               </dt>
               <dd className="text-sm font-medium sm:w-2/3 sm:text-right">
                 {isMissing ? (

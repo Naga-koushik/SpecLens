@@ -1,6 +1,7 @@
 import React from 'react';
 import { Phone, ComparisonRowItem } from '../../types';
 import { NOT_AVAILABLE } from '../../utils/comparison';
+import { GlossaryTerm } from '../common/GlossaryTerm';
 
 interface ComparisonRowProps {
   row: ComparisonRowItem;
@@ -33,7 +34,7 @@ export const ComparisonRow: React.FC<ComparisonRowProps> = ({
         } py-3.5 px-4 text-left text-xs font-semibold text-slate-700 min-w-[160px] max-w-[200px] border-r border-slate-200 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]`}
       >
         <div className="flex flex-col gap-1">
-          <span>{row.label}</span>
+          <GlossaryTerm term={row.label} />
           {row.isDifferent && (
             <span
               className="inline-flex items-center w-fit text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded"
