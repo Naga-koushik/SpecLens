@@ -263,3 +263,6 @@ Our Express server maps all upstream errors to our standard internal error contr
 | `GET /devices/by-manufacturer/` | Confirmed | Parameter is `manufacturer`, not `brand` |
 | Image format (base64 vs URL) | Confirmed | Both base64 (`image_b64`, `main_image_b64`) and URLs can be present |
 | Exact field availability per phone | ASSUMED variable | External phones have varying degrees of missing specs; normalizers must handle null/missing safely |
+| Hand-written `server/fixtures/*.json` | ASSUMED (Synthetic) | Contains hand-written fixtures and generated SVG placeholder images; not real upstream API responses |
+| Real API Fixtures `server/fixtures/live/` | Target (Live) | Real responses downloaded by `server/scripts/fetch-fixtures.mjs` when an API key is provided |
+
