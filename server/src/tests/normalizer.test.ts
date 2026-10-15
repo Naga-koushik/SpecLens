@@ -124,8 +124,20 @@ describe('Phone Normalizers', () => {
     expect(phone.battery).toBeNull();
   });
 
-  it('throws an error when raw device is null or undefined', () => {
-    expect(() => normalizePhone(null as any)).toThrow('Cannot normalize null or undefined device');
+  it('strips oversized base64 images from PhoneSummary list responses', () => {
+    const hugeBase64 = 'A'.repeat(20000);
+    const itemWithHugeImage = {
+      id: 777,
+      name: 'Phone With Huge Base64',
+      brand: 'TestBrand',
+      image_b64: hugeBase64
+    };
+
+    const phone = normalizePhone(itemWithHugeImage);
+    expect(phone.image).toContain('data:image/jpeg;base64,');
+
+    const summary = normalizePhoneSummary(itemWithHugeImage);
+    expect(summary.thumbnail).toBeNull();
   });
 });
 

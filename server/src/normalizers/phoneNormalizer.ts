@@ -258,14 +258,28 @@ export function normalizePhone(raw: RawDeviceInput): Phone {
 
 /**
  * Normalizes a phone into a concise PhoneSummary model for grids and search.
+ * Ensures list payloads stay lightweight by stripping oversized base64 images.
  */
 export function normalizePhoneSummary(raw: RawDeviceInput): PhoneSummary {
   const phone = normalizePhone(raw);
+  const rawUrlThumb = cleanString(raw.thumbnail ?? raw.image_url);
+  let thumbnail = rawUrlThumb && (rawUrlThumb.startsWith('http://') || rawUrlThumb.startsWith('https://'))
+    ? rawUrlThumb
+    : phone.image;
+
+  // Protect list payloads: strip base64 data URIs exceeding 12KB
+  if (thumbnail && !thumbnail.startsWith('http://') && !thumbnail.startsWith('https://')) {
+    if (thumbnail.length > 12288) {
+      thumbnail = null;
+    }
+  }
+
   return {
     id: phone.id,
     name: phone.name,
     brand: phone.brand,
-    thumbnail: phone.image,
+    thumbnail,
     highlights: extractHighlights(phone)
   };
 }
+
