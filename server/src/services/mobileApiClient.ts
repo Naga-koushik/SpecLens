@@ -1,5 +1,5 @@
 import { env } from '../config/env.js';
-import { Phone, PhoneSummary, Brand, AutocompleteSuggestion } from '../types/index.js';
+import { Phone, PhoneSummary, Brand, AutocompleteSuggestion, RawDeviceInput } from '../types/index.js';
 import { MOCK_PHONES, MOCK_BRANDS, POPULAR_PHONE_NAMES } from '../fixtures/mockData.js';
 import { normalizePhone, normalizePhoneSummary } from '../normalizers/phoneNormalizer.js';
 import { AppError } from '../middleware/errorHandler.js';
@@ -91,7 +91,7 @@ class MobileApiClient {
       total: number;
       page: number;
       has_next: boolean;
-      devices: any[];
+      devices: RawDeviceInput[];
     }>(`/devices/search/?name=${encodeURIComponent(query)}&page=${page}&limit=${limit}`);
 
     const results = (data.devices || []).map((d) => normalizePhoneSummary(d));
@@ -121,7 +121,7 @@ class MobileApiClient {
       }));
     }
 
-    const data = await this.fetchUpstream<any[]>(
+    const data = await this.fetchUpstream<Array<{ id: number | string; name: string; brand?: string | { name?: string } }>>(
       `/devices/autocomplete/?q=${encodeURIComponent(query)}&limit=${limit}`
     );
 
@@ -149,7 +149,7 @@ class MobileApiClient {
 
     // In real mode, fetch devices in a single call to protect request quota (5 req/min free tier)
     try {
-      const data = await this.fetchUpstream<{ devices: any[] }>('/devices/?page=1&limit=6');
+      const data = await this.fetchUpstream<{ devices: RawDeviceInput[] }>('/devices/?page=1&limit=6');
       if (data && Array.isArray(data.devices) && data.devices.length > 0) {
         return data.devices.map((d) => normalizePhoneSummary(d));
       }
@@ -176,7 +176,7 @@ class MobileApiClient {
       return normalizePhone(phone);
     }
 
-    const data = await this.fetchUpstream<any>(`/devices/${encodeURIComponent(String(id))}/`);
+    const data = await this.fetchUpstream<RawDeviceInput>(`/devices/${encodeURIComponent(String(id))}/`);
     return normalizePhone(data);
   }
 
@@ -277,7 +277,7 @@ class MobileApiClient {
       total: number;
       page: number;
       has_next: boolean;
-      devices: any[];
+      devices: RawDeviceInput[];
     }>(`/devices/by-manufacturer/?manufacturer=${encodeURIComponent(brandName)}&page=${page}&limit=${limit}`);
 
     const results = (data.devices || []).map((d) => normalizePhoneSummary(d));

@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { mobileApiClient } from '../services/mobileApiClient.js';
 import { cache } from '../services/cache.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { Phone, PhoneSummary, SearchResponse, AutocompleteSuggestion } from '../types/index.js';
 
 const router = Router();
 
@@ -36,7 +37,7 @@ router.get('/phones/search', async (req: Request, res: Response, next: NextFunct
     }
 
     const cacheKey = `search:${q.toLowerCase()}:${page}`;
-    const cached = cache.getSearch<any>(cacheKey);
+    const cached = cache.getSearch<SearchResponse>(cacheKey);
     if (cached) {
       res.json(cached);
       return;
@@ -48,7 +49,7 @@ router.get('/phones/search', async (req: Request, res: Response, next: NextFunct
       res.json(data);
     } catch (err) {
       // Fallback to stale cache if available
-      const stale = cache.getStale<any>('search', cacheKey);
+      const stale = cache.getStale<SearchResponse>('search', cacheKey);
       if (stale) {
         res.json(stale);
         return;
@@ -74,7 +75,7 @@ router.get('/phones/autocomplete', async (req: Request, res: Response, next: Nex
 
     const { q, limit } = parseResult.data;
     const cacheKey = `ac:${q.toLowerCase()}:${limit}`;
-    const cached = cache.getSearch<any>(cacheKey);
+    const cached = cache.getSearch<AutocompleteSuggestion[]>(cacheKey);
     if (cached) {
       res.json({ suggestions: cached });
       return;
@@ -94,7 +95,7 @@ router.get('/phones/autocomplete', async (req: Request, res: Response, next: Nex
 router.get('/phones/popular', async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const cacheKey = 'popular_phones';
-    const cached = cache.getSearch<any>(cacheKey);
+    const cached = cache.getSearch<PhoneSummary[]>(cacheKey);
     if (cached) {
       res.json({ phones: cached });
       return;
@@ -125,7 +126,7 @@ router.get('/phones/:id', async (req: Request, res: Response, next: NextFunction
 
     const id = parseResult.data;
 
-    const cached = cache.getDetail<any>(id);
+    const cached = cache.getDetail<Phone>(id);
     if (cached) {
       res.json(cached);
       return;
@@ -136,7 +137,7 @@ router.get('/phones/:id', async (req: Request, res: Response, next: NextFunction
       cache.setDetail(id, phone);
       res.json(phone);
     } catch (err) {
-      const stale = cache.getStale<any>('detail', id);
+      const stale = cache.getStale<Phone>('detail', id);
       if (stale) {
         res.json(stale);
         return;
@@ -148,7 +149,7 @@ router.get('/phones/:id', async (req: Request, res: Response, next: NextFunction
   }
 });
 
-function searchQueryQueryCheck(query: any) {
+function searchQueryQueryCheck(query: unknown) {
   return searchQuerySchema.safeParse(query);
 }
 

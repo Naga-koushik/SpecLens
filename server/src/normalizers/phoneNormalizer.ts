@@ -1,4 +1,4 @@
-import { Phone, PhoneSummary } from '../types/index.js';
+import { Phone, PhoneSummary, RawDeviceInput } from '../types/index.js';
 
 /**
  * Pure function to safely clean and nullify empty or placeholder strings.
@@ -57,7 +57,7 @@ export function extractHighlights(phone: Partial<Phone>): string[] {
  * Normalizes a raw external device object into a standard Phone model.
  * Handles both the unified mock format and raw MobileAPI.dev shapes.
  */
-export function normalizePhone(raw: any): Phone {
+export function normalizePhone(raw: RawDeviceInput): Phone {
   if (!raw) {
     throw new Error('Cannot normalize null or undefined device');
   }
@@ -259,7 +259,7 @@ export function normalizePhone(raw: any): Phone {
 /**
  * Normalizes a phone into a concise PhoneSummary model for grids and search.
  */
-export function normalizePhoneSummary(raw: any): PhoneSummary {
+export function normalizePhoneSummary(raw: RawDeviceInput): PhoneSummary {
   const phone = normalizePhone(raw);
   return {
     id: phone.id,

@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { mobileApiClient } from '../services/mobileApiClient.js';
 import { cache } from '../services/cache.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { Brand, BrandResponse } from '../types/index.js';
 
 const router = Router();
 
@@ -16,7 +17,7 @@ const brandPageQuerySchema = z.object({
 router.get('/brands', async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const cacheKey = 'all_brands';
-    const cached = cache.getBrands<any>(cacheKey);
+    const cached = cache.getBrands<Brand[]>(cacheKey);
     if (cached) {
       res.json({ brands: cached });
       return;
@@ -27,7 +28,7 @@ router.get('/brands', async (_req: Request, res: Response, next: NextFunction) =
       cache.setBrands(cacheKey, brands);
       res.json({ brands });
     } catch (err) {
-      const stale = cache.getStale<any>('brands', cacheKey);
+      const stale = cache.getStale<Brand[]>('brands', cacheKey);
       if (stale) {
         res.json({ brands: stale });
         return;
@@ -53,7 +54,7 @@ router.get('/brands/:brand', async (req: Request, res: Response, next: NextFunct
     const page = parseResult.success ? parseResult.data.page : 1;
 
     const cacheKey = `brand:${brand.toLowerCase()}:${page}`;
-    const cached = cache.getBrands<any>(cacheKey);
+    const cached = cache.getBrands<BrandResponse>(cacheKey);
     if (cached) {
       res.json(cached);
       return;
@@ -64,7 +65,7 @@ router.get('/brands/:brand', async (req: Request, res: Response, next: NextFunct
       cache.setBrands(cacheKey, data);
       res.json(data);
     } catch (err) {
-      const stale = cache.getStale<any>('brands', cacheKey);
+      const stale = cache.getStale<BrandResponse>('brands', cacheKey);
       if (stale) {
         res.json(stale);
         return;

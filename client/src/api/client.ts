@@ -49,12 +49,13 @@ export async function apiClient<T>(endpoint: string, options: RequestInit = {}):
     }
 
     return (await response.json()) as T;
-  } catch (err: any) {
+  } catch (err: unknown) {
     clearTimeout(timeoutId);
     if (err instanceof ApiError) throw err;
-    if (err.name === 'AbortError') {
+    if (err && typeof err === 'object' && 'name' in err && err.name === 'AbortError') {
       throw new ApiError('UPSTREAM_TIMEOUT', 'Request timed out after 10 seconds', 504);
     }
-    throw new ApiError('UPSTREAM_UNAVAILABLE', err.message || 'Network connection failed', 502);
+    const message = err instanceof Error ? err.message : 'Network connection failed';
+    throw new ApiError('UPSTREAM_UNAVAILABLE', message, 502);
   }
 }
