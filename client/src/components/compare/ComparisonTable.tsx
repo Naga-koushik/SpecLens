@@ -4,18 +4,20 @@ import { Phone } from '../../types';
 import { buildComparisonRows, COMPARISON_CATEGORIES } from '../../utils/comparison';
 import { ComparisonRow } from './ComparisonRow';
 import { PhoneSelectorModal } from './PhoneSelectorModal';
-import { X, Plus, Smartphone, Share2, Check, Filter } from 'lucide-react';
+import { X, Plus, Smartphone, Share2, Check, Filter, Trash2 } from 'lucide-react';
 
 interface ComparisonTableProps {
   phones: Phone[];
   onRemovePhone: (id: string | number) => void;
   onAddPhone: (id: string | number) => void;
+  onClearAll?: () => void;
 }
 
 export const ComparisonTable: React.FC<ComparisonTableProps> = ({
   phones,
   onRemovePhone,
-  onAddPhone
+  onAddPhone,
+  onClearAll
 }) => {
   const [showDifferencesOnly, setShowDifferencesOnly] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +28,7 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
     setCopiedShareLink(true);
-    setTimeout(() => setCopiedShareLink(false), 2000);
+    setTimeout(() => setCopiedShareLink(false), 2500);
   };
 
   // Group rows by category
@@ -41,7 +43,7 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({
   const canAddMore = phones.length < 4;
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden my-6">
+    <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden my-6 relative">
       {/* Table Toolbar */}
       <div className="p-4 md:p-6 bg-slate-50/70 border-b border-slate-200 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -58,6 +60,17 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
+          {onClearAll && phones.length > 0 && (
+            <button
+              onClick={onClearAll}
+              className="inline-flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-red-50 text-slate-700 hover:text-red-700 border border-slate-200 hover:border-red-200 text-xs font-semibold rounded-xl shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-red-400"
+              title="Clear all compared smartphones"
+            >
+              <Trash2 className="w-4 h-4 text-red-500" />
+              <span>Clear all</span>
+            </button>
+          )}
+
           {canAddMore && (
             <button
               onClick={() => setIsModalOpen(true)}
@@ -87,6 +100,18 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Floating Confirmation Toast for Copy Link */}
+      {copiedShareLink && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-slate-900 text-white text-xs font-semibold rounded-2xl shadow-2xl border border-slate-700 animate-in fade-in slide-in-from-bottom-3 duration-200"
+        >
+          <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span>Comparison link copied to clipboard!</span>
+        </div>
+      )}
 
       {/* Horizontal Scroll Table Container */}
       <div className="overflow-x-auto custom-scrollbar">

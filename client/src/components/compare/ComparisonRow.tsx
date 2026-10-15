@@ -1,4 +1,5 @@
 import React from 'react';
+import { Award } from 'lucide-react';
 import { Phone, ComparisonRowItem } from '../../types';
 import { NOT_AVAILABLE } from '../../utils/comparison';
 import { GlossaryTerm } from '../common/GlossaryTerm';
@@ -50,16 +51,30 @@ export const ComparisonRow: React.FC<ComparisonRowProps> = ({
       {phones.map((phone) => {
         const val = row.values[phone.id] || NOT_AVAILABLE;
         const isMissing = val === NOT_AVAILABLE;
+        const isBest = !isMissing && (row.bestPhoneIds?.includes(phone.id) || row.bestPhoneIds?.includes(String(phone.id)) || row.bestPhoneIds?.includes(Number(phone.id)));
 
         return (
           <td
             key={phone.id}
-            className="py-3.5 px-4 text-xs md:text-sm text-slate-800 align-top min-w-[200px]"
+            className={`py-3.5 px-4 text-xs md:text-sm text-slate-800 align-top min-w-[200px] ${
+              isBest ? 'bg-emerald-50/40' : ''
+            }`}
           >
             {isMissing ? (
               <span className="text-slate-400 italic">Not available</span>
             ) : (
-              <span className="break-words">{val}</span>
+              <div className="flex flex-col gap-1 items-start">
+                <span className="break-words font-medium">{val}</span>
+                {isBest && (
+                  <span
+                    className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md"
+                    title="Top specification among compared phones"
+                  >
+                    <Award className="w-3 h-3 text-emerald-600" aria-hidden="true" />
+                    <span>Best</span>
+                  </span>
+                )}
+              </div>
             )}
           </td>
         );

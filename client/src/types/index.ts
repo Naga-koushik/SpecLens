@@ -133,4 +133,5 @@ export interface ComparisonRowItem {
   category: string;
   values: Record<string | number, string>;
   isDifferent: boolean;
+  bestPhoneIds?: Array<string | number>;
 }

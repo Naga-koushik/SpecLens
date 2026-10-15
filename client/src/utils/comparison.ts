@@ -67,6 +67,113 @@ const ROW_DEFINITIONS: RowDefinition[] = [
 /**
  * Pure function to build grouped, diff-highlighted rows for 2-4 phones.
  */
+export type MetricDirection = 'higher' | 'lower';
+
+export interface MetricRule {
+  direction: MetricDirection;
+  extract: (val: string) => number | null;
+}
+
+export const NUMERIC_ROW_METRICS: Record<string, MetricRule> = {
+  // Battery Capacity (mAh): higher is better
+  batteryCap: {
+    direction: 'higher',
+    extract: (val: string) => {
+      const match = val.match(/(\d[\d,\.]*)\s*(?:mAh)?/i);
+      if (!match) return null;
+      const num = parseFloat(match[1].replace(/,/g, ''));
+      return isNaN(num) || num <= 0 ? null : num;
+    }
+  },
+  // RAM: higher is better
+  ram: {
+    direction: 'higher',
+    extract: (val: string) => {
+      const matches = [...val.matchAll(/(\d+)\s*(?:GB|MB)/gi)];
+      if (matches.length === 0) {
+        const fallback = val.match(/(\d+)/);
+        return fallback ? parseFloat(fallback[1]) : null;
+      }
+      const numbers = matches.map((m) => {
+        const n = parseFloat(m[1]);
+        return m[0].toUpperCase().includes('MB') ? n / 1024 : n;
+      });
+      const max = Math.max(...numbers);
+      return isNaN(max) || max <= 0 ? null : max;
+    }
+  },
+  // Refresh Rate (Hz): higher is better
+  displayRefresh: {
+    direction: 'higher',
+    extract: (val: string) => {
+      const match = val.match(/(\d+)\s*(?:Hz)?/i);
+      if (!match) return null;
+      const num = parseFloat(match[1]);
+      return isNaN(num) || num <= 0 ? null : num;
+    }
+  },
+  // Screen Size (inches): higher is better
+  displaySize: {
+    direction: 'higher',
+    extract: (val: string) => {
+      const match = val.match(/(\d+(?:\.\d+)?)/);
+      if (!match) return null;
+      const num = parseFloat(match[1]);
+      return isNaN(num) || num <= 0 ? null : num;
+    }
+  },
+  // Weight (grams): lower is better
+  weight: {
+    direction: 'lower',
+    extract: (val: string) => {
+      const match = val.match(/(\d+(?:\.\d+)?)\s*(?:g|grams)?/i);
+      if (!match) return null;
+      const num = parseFloat(match[1]);
+      return isNaN(num) || num <= 0 ? null : num;
+    }
+  }
+};
+
+/**
+ * Identify which phone IDs hold the best value for a numeric comparison row.
+ */
+export function getBestPhoneIdsForRow(
+  rowKey: string,
+  values: Record<string | number, string>
+): Array<string | number> {
+  const rule = NUMERIC_ROW_METRICS[rowKey];
+  if (!rule) return [];
+
+  const parsed: Array<{ id: string | number; num: number }> = [];
+
+  for (const [id, valStr] of Object.entries(values)) {
+    if (!valStr || valStr === NOT_AVAILABLE) continue;
+    const num = rule.extract(valStr);
+    if (num !== null && !isNaN(num) && num > 0) {
+      const parsedId = /^\d+$/.test(id) ? Number(id) : id;
+      parsed.push({ id: parsedId, num });
+    }
+  }
+
+  // Need at least 2 phones with valid numbers to compare
+  if (parsed.length < 2) return [];
+
+  // If all phones have the exact same number, no "Best" badge
+  const allIdentical = parsed.every((p) => p.num === parsed[0].num);
+  if (allIdentical) return [];
+
+  if (rule.direction === 'higher') {
+    const maxVal = Math.max(...parsed.map((p) => p.num));
+    return parsed.filter((p) => p.num === maxVal).map((p) => p.id);
+  } else {
+    const minVal = Math.min(...parsed.map((p) => p.num));
+    return parsed.filter((p) => p.num === minVal).map((p) => p.id);
+  }
+}
+
+/**
+ * Pure function to build grouped, diff-highlighted rows for 2-4 phones.
+ */
 export function buildComparisonRows(phones: Phone[]): ComparisonRowItem[] {
   if (!phones || phones.length === 0) return [];
 
@@ -87,17 +194,18 @@ export function buildComparisonRows(phones: Phone[]): ComparisonRowItem[] {
       }
     });
 
-    // A row is considered different if there is more than 1 distinct non-missing value
-    // or if some phones have a value and others are 'Not available'
     const allValues = Object.values(values);
     const hasDifferentValues = new Set(allValues).size > 1;
+    const bestPhoneIds = getBestPhoneIdsForRow(def.key, values);
 
     return {
       key: def.key,
       label: def.label,
       category: def.category,
       values,
-      isDifferent: hasDifferentValues && phones.length > 1
+      isDifferent: hasDifferentValues && phones.length > 1,
+      bestPhoneIds: bestPhoneIds.length > 0 ? bestPhoneIds : undefined
     };
   });
 }
+

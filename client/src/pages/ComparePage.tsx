@@ -168,6 +168,7 @@ export const ComparePage: React.FC = () => {
           phones={data.phones}
           onRemovePhone={handleRemovePhone}
           onAddPhone={handleAddPhone}
+          onClearAll={() => setSearchParams({})}
         />
       )}
 

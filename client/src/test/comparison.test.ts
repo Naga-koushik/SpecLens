@@ -122,6 +122,29 @@ describe('buildComparisonRows', () => {
     expect(categories.has('Camera')).toBe(true);
   });
 
+  it('identifies best numeric values respecting direction (higher vs lower)', () => {
+    const rows = buildComparisonRows([phoneA, phoneB]);
+
+    // Battery: 5000 mAh > 4000 mAh -> Phone B (id 2) is best
+    const batteryRow = rows.find((r) => r.key === 'batteryCap');
+    expect(batteryRow?.bestPhoneIds).toBeDefined();
+    expect(batteryRow?.bestPhoneIds).toContain(2);
+    expect(batteryRow?.bestPhoneIds).not.toContain(1);
+
+    // RAM: 12GB > 8GB -> Phone B (id 2) is best
+    const ramRow = rows.find((r) => r.key === 'ram');
+    expect(ramRow?.bestPhoneIds).toContain(2);
+
+    // Weight: 170 g < 200 g -> Phone A (id 1) is best (lower is better)
+    const weightRow = rows.find((r) => r.key === 'weight');
+    expect(weightRow?.bestPhoneIds).toContain(1);
+    expect(weightRow?.bestPhoneIds).not.toContain(2);
+
+    // Refresh rate: both 120Hz -> no Best badge (identical values)
+    const refreshRow = rows.find((r) => r.key === 'displayRefresh');
+    expect(refreshRow?.bestPhoneIds).toBeUndefined();
+  });
+
   it('handles empty phones array safely', () => {
     const rows = buildComparisonRows([]);
     expect(rows).toEqual([]);
