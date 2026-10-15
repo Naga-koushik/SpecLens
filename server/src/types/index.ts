@@ -121,88 +121,48 @@ export type ErrorCode =
   | 'INTERNAL_ERROR';
 
 export interface RawDeviceInput {
-  id?: string | number;
-  _id?: string | number;
-  name?: string;
-  brand?: string | { id?: number; name?: string };
-  manufacturer_name?: string;
-  manufacturer?: { id?: number; name?: string } | string;
-  image?: string;
-  image_url?: string;
-  thumbnail?: string;
-  image_b64?: string;
-  main_image_b64?: string;
-  releaseDate?: string;
-  release_date?: string;
-  dimensions?: string;
-  weight?: string;
-  body?: { dimensions?: string; weight?: string };
-  display?: {
-    size?: string;
-    resolution?: string;
-    type?: string;
-    refreshRate?: string;
-    refresh_rate?: string;
-    protection?: string;
-  };
-  screen_size?: string;
-  screen_resolution?: string;
-  processor?: {
-    chipset?: string;
-    cpu?: string;
-    gpu?: string;
-  };
-  hardware?: string;
-  memory?: {
-    ramOptions?: string;
-    ram_options?: string;
-    cardSlot?: string;
-    card_slot?: string;
-  };
-  ram?: string;
-  storage?: {
-    storageOptions?: string;
-    storage_options?: string;
-  } | string;
-  rearCamera?: {
-    modules?: string;
-    features?: string;
-    video?: string;
-  };
-  camera?: string;
-  frontCamera?: {
-    modules?: string;
-    features?: string;
-    video?: string;
-  };
-  selfie_camera?: string;
-  battery?: {
-    capacity?: string;
-    type?: string;
-    charging?: string;
-  };
-  battery_capacity?: string;
-  charging?: string;
-  operatingSystem?: string;
-  operating_system?: string;
-  os?: string;
-  network?: {
-    technologies?: string;
-    simType?: string;
-    sim_type?: string;
-  };
-  network_technology?: string;
-  sim?: string;
-  connectivity?: {
-    wifi?: string;
-    bluetooth?: string;
-    nfc?: string;
-    usb?: string;
-    positioning?: string;
-  };
-  wlan?: string;
-  [key: string]: unknown;
+  id?: string | number | null;
+  _id?: string | number | null;
+  name?: string | null;
+  brand?: string | { id?: number; name?: string } | null;
+  manufacturer_name?: string | null;
+  manufacturer?: { id?: number; name?: string } | string | null;
+  image?: string | null;
+  image_url?: string | null;
+  thumbnail?: string | null;
+  image_b64?: string | null;
+  main_image_b64?: string | null;
+  releaseDate?: string | null;
+  release_date?: string | null;
+  dimensions?: string | null;
+  weight?: string | null;
+  body?: { dimensions?: string | null; weight?: string | null } | null;
+  display?: (Partial<DisplaySpec> & { refresh_rate?: string | null }) | null;
+  screen_size?: string | null;
+  screen_resolution?: string | null;
+  processor?: Partial<ProcessorSpec> | null;
+  hardware?: string | null;
+  memory?: (Partial<MemorySpec> & { ram_options?: string | null; card_slot?: string | null }) | null;
+  ram?: string | null;
+  storage?: (Partial<StorageSpec> & { storage_options?: string | null }) | string | null;
+  rearCamera?: Partial<CameraSpec> | null;
+  camera?: string | null;
+  frontCamera?: Partial<CameraSpec> | null;
+  selfie_camera?: string | null;
+  battery?: (Partial<BatterySpec> & { charging?: string | null }) | null;
+  battery_capacity?: string | null;
+  charging?: string | null;
+  operatingSystem?: string | null;
+  operating_system?: string | null;
+  os?: string | null;
+  network?: (Partial<NetworkSpec> & { sim_type?: string | null }) | null;
+  network_technology?: string | null;
+  sim?: string | null;
+  connectivity?: Partial<ConnectivitySpec> | null;
+  wlan?: string | null;
 }
+
+export type DeviceInput = RawDeviceInput;
 
 export interface ApiErrorResponse {
   error: {

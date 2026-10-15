@@ -1,4 +1,4 @@
-import { Phone, PhoneSummary, RawDeviceInput } from '../types/index.js';
+import { Phone, PhoneSummary, DeviceInput } from '../types/index.js';
 
 /**
  * Pure function to safely clean and nullify empty or placeholder strings.
@@ -57,7 +57,7 @@ export function extractHighlights(phone: Partial<Phone>): string[] {
  * Normalizes a raw external device object into a standard Phone model.
  * Handles both the unified mock format and raw MobileAPI.dev shapes.
  */
-export function normalizePhone(raw: RawDeviceInput): Phone {
+export function normalizePhone(raw: DeviceInput): Phone {
   if (!raw) {
     throw new Error('Cannot normalize null or undefined device');
   }
@@ -74,8 +74,12 @@ export function normalizePhone(raw: RawDeviceInput): Phone {
     brand = cleanString(raw.brand.name) ?? brand;
   } else if (raw.manufacturer_name) {
     brand = cleanString(raw.manufacturer_name) ?? brand;
-  } else if (raw.manufacturer && typeof raw.manufacturer.name === 'string') {
-    brand = cleanString(raw.manufacturer.name) ?? brand;
+  } else if (raw.manufacturer) {
+    if (typeof raw.manufacturer === 'string') {
+      brand = cleanString(raw.manufacturer) ?? brand;
+    } else if (typeof raw.manufacturer === 'object' && raw.manufacturer !== null && typeof raw.manufacturer.name === 'string') {
+      brand = cleanString(raw.manufacturer.name) ?? brand;
+    }
   }
 
   // Resolve Image (support image, image_url, thumbnail, base64)
@@ -151,7 +155,13 @@ export function normalizePhone(raw: RawDeviceInput): Phone {
 
   // Storage
   let storage = null;
-  const storageOptions = cleanString(raw.storage?.storageOptions ?? raw.storage?.storage_options ?? (typeof raw.storage === 'string' ? raw.storage : null));
+  let rawStorageOptions: string | null = null;
+  if (typeof raw.storage === 'string') {
+    rawStorageOptions = raw.storage;
+  } else if (raw.storage && typeof raw.storage === 'object') {
+    rawStorageOptions = raw.storage.storageOptions ?? raw.storage.storage_options ?? null;
+  }
+  const storageOptions = cleanString(rawStorageOptions);
   if (storageOptions) {
     storage = {
       storageOptions
@@ -235,7 +245,7 @@ export function normalizePhone(raw: RawDeviceInput): Phone {
   }
 
   return {
-    id,
+    id: id ?? 0,
     name,
     brand,
     image,
@@ -260,7 +270,7 @@ export function normalizePhone(raw: RawDeviceInput): Phone {
  * Normalizes a phone into a concise PhoneSummary model for grids and search.
  * Ensures list payloads stay lightweight by stripping oversized base64 images.
  */
-export function normalizePhoneSummary(raw: RawDeviceInput): PhoneSummary {
+export function normalizePhoneSummary(raw: DeviceInput): PhoneSummary {
   const phone = normalizePhone(raw);
   const rawUrlThumb = cleanString(raw.thumbnail ?? raw.image_url);
   let thumbnail = rawUrlThumb && (rawUrlThumb.startsWith('http://') || rawUrlThumb.startsWith('https://'))
