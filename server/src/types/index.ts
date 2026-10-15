@@ -77,6 +77,8 @@ export interface PhoneSummary {
   brand: string;
   thumbnail: string | null;
   highlights: string[];
+  releaseDate?: string | null;
+  ram?: string | null;
 }
 
 export interface Brand {

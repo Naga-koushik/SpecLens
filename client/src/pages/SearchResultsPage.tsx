@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { usePhoneSearch } from '../hooks/usePhoneSearch';
 import { PhoneGrid } from '../components/phone/PhoneGrid';
+import { FilterSortBar } from '../components/phone/FilterSortBar';
 import { Pagination } from '../components/common/Pagination';
 import { PhoneCardSkeleton } from '../components/common/Skeleton';
 import { ErrorState } from '../components/common/ErrorState';
 import { EmptyState } from '../components/common/EmptyState';
 import { SearchBar } from '../components/search/SearchBar';
 import { Search } from 'lucide-react';
+import { PhoneSummary } from '../types';
 
 export const SearchResultsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -16,14 +18,18 @@ export const SearchResultsPage: React.FC = () => {
 
   const { data, isLoading, isError, error, refetch } = usePhoneSearch(query, page);
 
-  const handlePageChange = (newPage: number) => {
-    setSearchParams({ q: query, page: String(newPage) });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   const results = data?.results || [];
   const hasMore = data?.hasMore || false;
   const total = data?.total ?? results.length;
+
+  const [filteredResults, setFilteredResults] = useState<PhoneSummary[]>(results);
+
+  const handlePageChange = (newPage: number) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('page', String(newPage));
+    setSearchParams(newParams);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="space-y-8">
@@ -98,7 +104,23 @@ export const SearchResultsPage: React.FC = () => {
       {/* Results Grid & Pagination */}
       {!isLoading && !isError && results.length > 0 && (
         <>
-          <PhoneGrid phones={results} />
+          <FilterSortBar
+            phones={results}
+            onFilteredChange={setFilteredResults}
+            showBrandFilter={true}
+          />
+
+          {filteredResults.length === 0 ? (
+            <EmptyState
+              title="No phones match your active filters"
+              message="No devices loaded on this page match your selected brand, RAM, or year filters. Try loosening or resetting your filter criteria."
+              actionText="Reset Filters"
+              onAction={() => setSearchParams({ q: query, page: String(page) })}
+            />
+          ) : (
+            <PhoneGrid phones={filteredResults} />
+          )}
+
           <Pagination
             currentPage={page}
             hasMore={hasMore}

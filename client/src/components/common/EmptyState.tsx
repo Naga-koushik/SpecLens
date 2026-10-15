@@ -7,6 +7,7 @@ interface EmptyStateProps {
   message?: string;
   actionText?: string;
   actionHref?: string;
+  onAction?: () => void;
   icon?: React.ReactNode;
 }
 
@@ -15,6 +16,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   message = 'We could not find any smartphones matching your criteria. Try adjusting your query or check popular devices.',
   actionText = 'Browse all brands',
   actionHref = '/brands',
+  onAction,
   icon
 }) => {
   return (
@@ -26,7 +28,18 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       <h2 className="text-xl font-bold text-slate-900 mb-2">{title}</h2>
       <p className="text-slate-600 text-sm leading-relaxed mb-6">{message}</p>
 
-      {actionText && actionHref && (
+      {actionText && onAction && (
+        <button
+          type="button"
+          onClick={onAction}
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm rounded-xl transition-colors shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500"
+        >
+          {actionText}
+          <ArrowRight className="w-4 h-4" aria-hidden="true" />
+        </button>
+      )}
+
+      {actionText && !onAction && actionHref && (
         <Link
           to={actionHref}
           className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm rounded-xl transition-colors shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500"

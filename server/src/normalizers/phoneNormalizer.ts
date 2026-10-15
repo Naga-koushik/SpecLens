@@ -289,7 +289,9 @@ export function normalizePhoneSummary(raw: DeviceInput): PhoneSummary {
     name: phone.name,
     brand: phone.brand,
     thumbnail,
-    highlights: extractHighlights(phone)
+    highlights: extractHighlights(phone),
+    releaseDate: phone.releaseDate ?? null,
+    ram: phone.memory?.ramOptions ?? null
   };
 }
 
