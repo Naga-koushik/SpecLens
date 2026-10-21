@@ -140,6 +140,9 @@ export const MobileComparisonSwipe: React.FC<MobileComparisonSwipeProps> = ({
               <img
                 src={currentPhone.image}
                 alt={`${currentPhone.brand} ${currentPhone.name}`}
+                loading="lazy"
+                width="112"
+                height="144"
                 className="max-h-full max-w-full object-contain"
               />
             ) : (

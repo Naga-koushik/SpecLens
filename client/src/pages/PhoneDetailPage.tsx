@@ -116,6 +116,9 @@ export const PhoneDetailPage: React.FC = () => {
               <img
                 src={phone.image}
                 alt={`${phone.brand} ${phone.name}`}
+                loading="lazy"
+                width="224"
+                height="288"
                 onError={() => setImageError(true)}
                 className="max-h-full max-w-full object-contain drop-shadow-md"
               />
