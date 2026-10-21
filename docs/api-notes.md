@@ -249,20 +249,17 @@ Our Express server maps all upstream errors to our standard internal error contr
 
 ---
 
-## 4. Confirmed vs. Assumed Status
+## 4. Upstream Endpoint Verification Status (VERIFIED vs. UNVERIFIED)
 
-| Feature / Endpoint | Status | Notes |
-|---|---|---|
-| Base URL `https://api.mobileapi.dev/` | Confirmed | Documented on official site |
-| Auth via `Authorization: Bearer` / `Token` | Confirmed | Documented on official site |
-| Auth via `?key=` query param | Confirmed | Documented on official site |
-| `GET /devices/search/` (`name`, `page`) | Confirmed | Response has `total`, `devices` array |
-| `GET /devices/autocomplete/` (`q`, `limit`) | Confirmed | Response is a direct JSON array of suggestions |
-| `GET /devices/{id}/` | Confirmed | Core device details and specs |
-| `GET /manufacturers/` | Confirmed | Response has `manufacturers` array |
-| `GET /devices/by-manufacturer/` | Confirmed | Parameter is `manufacturer`, not `brand` |
-| Image format (base64 vs URL) | Confirmed | Both base64 (`image_b64`, `main_image_b64`) and URLs can be present |
-| Exact field availability per phone | ASSUMED variable | External phones have varying degrees of missing specs; normalizers must handle null/missing safely |
-| Hand-written `server/fixtures/*.json` | ASSUMED (Synthetic) | Contains hand-written fixtures and generated SVG placeholder images; not real upstream API responses |
-| Real API Fixtures `server/fixtures/live/` | Target (Live) | Real responses downloaded by `server/scripts/fetch-fixtures.mjs` when an API key is provided |
+| Endpoint | Method | Contract / Schema Status | Real Network Verification (`USE_MOCK=false`) | Notes |
+|---|---|---|---|---|
+| `GET /devices/search/` | GET | VERIFIED via Official Documentation | UNVERIFIED (No API Key available) | Contract tested via unit tests against mock fetch |
+| `GET /devices/autocomplete/` | GET | VERIFIED via Official Documentation | UNVERIFIED (No API Key available) | Tested with synthetic fixtures and debounced client |
+| `GET /devices/{id}/` | GET | VERIFIED via Official Documentation | UNVERIFIED (No API Key available) | Normalizer tested for varied payload shapes |
+| `GET /manufacturers/` | GET | VERIFIED via Official Documentation | UNVERIFIED (No API Key available) | Pagination & caching (24h) tested |
+| `GET /devices/by-manufacturer/` | GET | VERIFIED via Official Documentation | UNVERIFIED (No API Key available) | Slug-to-name lookup verified in unit tests |
+| Auth via `Authorization: Bearer` | Header | VERIFIED via Official Documentation | UNVERIFIED against live upstream | Standard RFC 6750 bearer scheme |
+| Real upstream error shapes (400/404/429/500) | Status | VERIFIED against docs & simulated | UNVERIFIED against live upstream | Tested via Supertest + simulated mocked upstream |
+| Synthetic Fixtures `server/fixtures/*.json` | Fixture | VERIFIED ASSUMED (Synthetic) | N/A | Hand-crafted specs with generated SVG placeholders |
+| Live Fixtures `server/fixtures/live/*.json` | Fixture | Target directory ready | UNVERIFIED (Awaiting real key) | `fetch-fixtures.mjs` targets this directory when run |
 
