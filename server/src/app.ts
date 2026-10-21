@@ -18,10 +18,11 @@ export function createApp() {
   // Security Headers
   app.use(helmet());
 
-  // CORS Configuration
+  // CORS Configuration (supports comma-separated origins)
+  const allowedOrigins = env.CLIENT_ORIGIN.split(',').map((origin) => origin.trim()).filter(Boolean);
   app.use(
     cors({
-      origin: env.CLIENT_ORIGIN,
+      origin: allowedOrigins.length === 1 ? allowedOrigins[0] : allowedOrigins,
       methods: ['GET'],
       allowedHeaders: ['Content-Type', 'Authorization']
     })
