@@ -64,7 +64,7 @@ export const PhoneCard: React.FC<PhoneCardProps> = ({
   };
 
   return (
-    <div className="group bg-white rounded-2xl border border-slate-200/80 hover:border-emerald-300 p-5 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col h-full relative">
+    <div className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-emerald-300 dark:hover:border-emerald-600 p-5 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col h-full relative">
       {/* Favorite Button */}
       <button
         type="button"
@@ -72,8 +72,8 @@ export const PhoneCard: React.FC<PhoneCardProps> = ({
         aria-label={isFav ? `Remove ${phone.name} from favorites` : `Add ${phone.name} to favorites`}
         className={`absolute top-4 right-4 z-10 p-2 rounded-full backdrop-blur-sm transition-all focus-visible:ring-2 focus-visible:ring-rose-500 ${
           isFav
-            ? 'bg-rose-50 text-rose-600 shadow-sm border border-rose-200'
-            : 'bg-white/90 text-slate-400 hover:text-rose-600 hover:bg-white shadow-xs border border-slate-200/60'
+            ? 'bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 shadow-sm border border-rose-200 dark:border-rose-900'
+            : 'bg-white/90 dark:bg-slate-800/90 text-slate-400 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-white dark:hover:bg-slate-700 shadow-xs border border-slate-200/60 dark:border-slate-700'
         }`}
       >
         <Heart
@@ -85,7 +85,7 @@ export const PhoneCard: React.FC<PhoneCardProps> = ({
       {/* Phone Image Container */}
       <Link
         to={`/phones/${phone.id}`}
-        className="w-full h-48 bg-slate-50 rounded-xl mb-4 flex items-center justify-center p-4 overflow-hidden relative"
+        className="w-full h-48 bg-slate-50 dark:bg-slate-800/60 rounded-xl mb-4 flex items-center justify-center p-4 overflow-hidden relative"
       >
         {!imageError && phone.thumbnail ? (
           <img
@@ -107,11 +107,11 @@ export const PhoneCard: React.FC<PhoneCardProps> = ({
       <div className="mb-3">
         <Link
           to={`/brands/${phone.brand.toLowerCase()}`}
-          className="inline-block text-xs font-semibold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full mb-1 hover:bg-emerald-100 transition-colors"
+          className="inline-block text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full mb-1 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
         >
           {phone.brand}
         </Link>
-        <h3 className="font-bold text-slate-900 text-lg group-hover:text-emerald-700 transition-colors line-clamp-1">
+        <h3 className="font-bold text-slate-900 dark:text-white text-lg group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
           <Link to={`/phones/${phone.id}`}>{phone.name}</Link>
         </h3>
       </div>
@@ -120,7 +120,7 @@ export const PhoneCard: React.FC<PhoneCardProps> = ({
       <div className="space-y-1.5 mb-5 flex-1">
         {phone.highlights && phone.highlights.length > 0 ? (
           phone.highlights.slice(0, 3).map((h, i) => (
-            <div key={i} className="text-xs text-slate-600 flex items-center gap-1.5 line-clamp-1">
+            <div key={i} className="text-xs text-slate-600 dark:text-slate-300 flex items-center gap-1.5 line-clamp-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
               <span>{h}</span>
             </div>
@@ -131,10 +131,10 @@ export const PhoneCard: React.FC<PhoneCardProps> = ({
       </div>
 
       {/* Actions */}
-      <div className="grid grid-cols-2 gap-2 mt-auto pt-3 border-t border-slate-100">
+      <div className="grid grid-cols-2 gap-2 mt-auto pt-3 border-t border-slate-100 dark:border-slate-800">
         <Link
           to={`/phones/${phone.id}`}
-          className="min-h-[44px] flex items-center justify-center px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-slate-400 text-center"
+          className="min-h-[44px] flex items-center justify-center px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-slate-400 text-center"
         >
           View Specs
         </Link>
@@ -145,7 +145,7 @@ export const PhoneCard: React.FC<PhoneCardProps> = ({
           className={`min-h-[44px] flex items-center justify-center gap-1 px-3 py-2 text-xs font-semibold rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500 text-center ${
             isComparing
               ? 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm'
-              : 'border border-slate-200 text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300'
+              : 'border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 hover:text-emerald-700 dark:hover:text-emerald-400 hover:border-emerald-300 dark:hover:border-emerald-600'
           }`}
         >
           {isComparing ? (

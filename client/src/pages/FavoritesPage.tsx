@@ -19,20 +19,20 @@ export const FavoritesPage: React.FC = () => {
   return (
     <div className="space-y-8">
       {/* Header Card */}
-      <div className="bg-white rounded-3xl border border-slate-200/90 p-6 md:p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 md:p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 transition-colors">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
-              <Heart className="w-5 h-5 fill-rose-600" aria-hidden="true" />
+            <div className="w-10 h-10 rounded-2xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+              <Heart className="w-5 h-5 fill-rose-600 dark:fill-rose-400" aria-hidden="true" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white">
               My Favorites
             </h1>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-700">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 dark:bg-rose-900/60 text-rose-700 dark:text-rose-300">
               {favorites.length}
             </span>
           </div>
-          <p className="text-slate-500 text-sm max-w-xl">
+          <p className="text-slate-500 dark:text-slate-400 text-sm max-w-xl">
             Smartphones you have bookmarked for quick reference. Stored locally in your browser for privacy.
           </p>
         </div>
@@ -51,7 +51,7 @@ export const FavoritesPage: React.FC = () => {
             <button
               type="button"
               onClick={clearFavorites}
-              className="min-h-[42px] inline-flex items-center gap-2 px-4 py-2 border border-slate-200 hover:border-rose-300 hover:bg-rose-50 text-slate-700 hover:text-rose-700 font-semibold text-xs rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-rose-500"
+              className="min-h-[42px] inline-flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-700 hover:border-rose-300 dark:hover:border-rose-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-700 dark:text-slate-300 hover:text-rose-700 dark:hover:text-rose-400 font-semibold text-xs rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-rose-500"
             >
               <Trash2 className="w-4 h-4" aria-hidden="true" />
               <span>Clear All</span>

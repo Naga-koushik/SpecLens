@@ -6,7 +6,7 @@ import { ErrorBoundary } from '../components/common/ErrorBoundary';
 
 export const RootLayout: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-emerald-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-emerald-500 selection:text-white transition-colors duration-200">
       {/* Skip to Content accessible link */}
       <a
         href="#main-content"
