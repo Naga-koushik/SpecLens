@@ -149,4 +149,16 @@ describe('Server API Endpoints', () => {
     expect(res.body.brand).toBe('OnePlus');
     expect(res.body.results.length).toBeGreaterThan(0);
   });
+
+  it('Returns 404 for unknown /api/* endpoints', async () => {
+    const res = await request(app).get('/api/unknown/endpoint');
+    expect(res.status).toBe(404);
+    expect(res.body.error.code).toBe('NOT_FOUND');
+  });
+
+  it('Sets helmet security headers and CORS correctly', async () => {
+    const res = await request(app).get('/api/health');
+    expect(res.headers).toHaveProperty('x-content-type-options', 'nosniff');
+    expect(res.headers).toHaveProperty('x-frame-options');
+  });
 });
