@@ -23,22 +23,22 @@ export const ComparisonRow: React.FC<ComparisonRowProps> = ({
 
   return (
     <tr
-      className={`border-b border-slate-100 transition-colors ${
-        row.isDifferent ? 'bg-amber-50/60 hover:bg-amber-100/50' : 'hover:bg-slate-50/70'
+      className={`border-b border-slate-100 dark:border-slate-800 transition-colors ${
+        row.isDifferent ? 'bg-amber-50/60 dark:bg-amber-950/20 hover:bg-amber-100/50 dark:hover:bg-amber-950/40' : 'hover:bg-slate-50/70 dark:hover:bg-slate-800/40'
       }`}
     >
       {/* Sticky Spec Label Header - solid background prevents bleed-through on horizontal scroll */}
       <th
         scope="row"
         className={`sticky left-0 z-10 ${
-          row.isDifferent ? 'bg-amber-50' : 'bg-white'
-        } py-3.5 px-4 text-left text-xs font-semibold text-slate-700 min-w-[160px] max-w-[200px] border-r border-slate-200 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]`}
+          row.isDifferent ? 'bg-amber-50 dark:bg-slate-900' : 'bg-white dark:bg-slate-900'
+        } py-3.5 px-4 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 min-w-[160px] max-w-[200px] border-r border-slate-200 dark:border-slate-800 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]`}
       >
         <div className="flex flex-col gap-1">
           <GlossaryTerm term={row.label} />
           {row.isDifferent && (
             <span
-              className="inline-flex items-center w-fit text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded"
+              className="inline-flex items-center w-fit text-[10px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80 px-1.5 py-0.5 rounded"
               title="Values differ between compared smartphones"
             >
               Different
@@ -56,21 +56,21 @@ export const ComparisonRow: React.FC<ComparisonRowProps> = ({
         return (
           <td
             key={phone.id}
-            className={`py-3.5 px-4 text-xs md:text-sm text-slate-800 align-top min-w-[200px] ${
-              isBest ? 'bg-emerald-50/40' : ''
+            className={`py-3.5 px-4 text-xs md:text-sm text-slate-800 dark:text-slate-200 align-top min-w-[200px] ${
+              isBest ? 'bg-emerald-50/40 dark:bg-emerald-950/30' : ''
             }`}
           >
             {isMissing ? (
-              <span className="text-slate-400 italic">Not available</span>
+              <span className="text-slate-400 dark:text-slate-500 italic">Not available</span>
             ) : (
               <div className="flex flex-col gap-1 items-start">
                 <span className="break-words font-medium">{val}</span>
                 {isBest && (
                   <span
-                    className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md"
+                    className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 px-2 py-0.5 rounded-md"
                     title="Top specification among compared phones"
                   >
-                    <Award className="w-3 h-3 text-emerald-600" aria-hidden="true" />
+                    <Award className="w-3 h-3 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                     <span>Best</span>
                   </span>
                 )}
@@ -83,7 +83,7 @@ export const ComparisonRow: React.FC<ComparisonRowProps> = ({
       {/* Matching column cell for add phone button header column */}
       {canAddMore && (
         <td
-          className="p-3 bg-slate-50/20 border-l border-dashed border-slate-200"
+          className="p-3 bg-slate-50/20 dark:bg-slate-800/20 border-l border-dashed border-slate-200 dark:border-slate-800"
           aria-hidden="true"
         />
       )}
