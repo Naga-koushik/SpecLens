@@ -20,9 +20,12 @@ import {
   Layers,
   Box,
   Check,
-  Heart
+  Heart,
+  Sparkles
 } from 'lucide-react';
 import { useFavorites } from '../hooks/useFavorites';
+import { useSimilarPhones } from '../hooks/useSimilarPhones';
+import { PhoneCard } from '../components/phone/PhoneCard';
 
 export const PhoneDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,6 +33,7 @@ export const PhoneDetailPage: React.FC = () => {
   const { data: phone, isLoading, isError, error, refetch } = usePhone(id);
   const { addRecentlyViewed } = useRecentlyViewed();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const similarPhones = useSimilarPhones(phone);
   const [imageError, setImageError] = useState(false);
   const [isAddedToCompare, setIsAddedToCompare] = useState(false);
 
@@ -337,6 +341,37 @@ export const PhoneDetailPage: React.FC = () => {
           ]}
         />
       </div>
+
+      {/* Similar Phones Section */}
+      {similarPhones.length > 0 && (
+        <section aria-labelledby="similar-phones-heading" className="space-y-4 pt-4 border-t border-slate-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-emerald-600" aria-hidden="true" />
+                <h2 id="similar-phones-heading" className="text-xl font-bold text-slate-900">
+                  Similar Smartphones
+                </h2>
+              </div>
+              <p className="text-xs text-slate-500 mt-1">
+                Other devices from {phone.brand} or released around the same period.
+              </p>
+            </div>
+            <Link
+              to={`/brands/${phone.brand.toLowerCase()}`}
+              className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"
+            >
+              All {phone.brand} Phones &rarr;
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            {similarPhones.map((similarPhone) => (
+              <PhoneCard key={similarPhone.id} phone={similarPhone} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 };
