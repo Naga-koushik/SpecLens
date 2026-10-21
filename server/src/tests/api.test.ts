@@ -161,4 +161,10 @@ describe('Server API Endpoints', () => {
     expect(res.headers).toHaveProperty('x-content-type-options', 'nosniff');
     expect(res.headers).toHaveProperty('x-frame-options');
   });
+
+  it('Applies rate limiting headers to API routes', async () => {
+    const res = await request(app).get('/api/health');
+    expect(res.headers).toHaveProperty('ratelimit-limit');
+    expect(res.headers).toHaveProperty('ratelimit-remaining');
+  });
 });
