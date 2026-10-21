@@ -33,6 +33,40 @@ Built as an academic capstone project, SpecLens features a decoupled full-stack 
 
 ---
 
+## Application Showcase
+
+| View | Light Theme | Dark Theme |
+|:---|:---:|:---:|
+| **Home Screen** | ![SpecLens Home Light](docs/screenshots/home-light.jpg) | ![SpecLens Home Dark](docs/screenshots/home-dark.jpg) |
+| **Comparison Table** | ![SpecLens Compare Light](docs/screenshots/compare-light.jpg) | ![SpecLens Compare Dark](docs/screenshots/compare-dark.jpg) |
+| **Device Specifications** | ![SpecLens Detail View](docs/screenshots/detail-light.jpg) | *(Integrated Dark Theme)* |
+
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                       Client (React)                        │
+│   Vite • React Router (Lazy Routes) • TanStack Query v5    │
+│            Tailwind CSS • Accessible Semantic UI            │
+└──────────────────────────────┬──────────────────────────────┘
+                               │ /api/* (Proxied HTTP Requests)
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Express Backend Server                   │
+│   Rate Limiting • Helmet • Compression • Zod Validation     │
+│   In-Memory LRU Cache with Stale-on-Error Fallback          │
+└──────────────┬───────────────────────────────┬──────────────┘
+               │ (Mock Mode: USE_MOCK=true)    │ (Live Mode)
+               ▼                               ▼
+     ┌────────────────────────┐      ┌───────────────────┐
+     │     Local Fixtures     │      │   MobileAPI.dev   │
+     │  14 Curated Phones     │      │  External REST    │
+     │ (Specs + Placeholders) │      │  (Protected Key)  │
+     │  6 Major Brands        │      │                   │
+     └────────────────────────┘      └───────────────────┘
+```
+
+---
+
 ## Key Features
 
 1. **Home Screen (`/`)**:
