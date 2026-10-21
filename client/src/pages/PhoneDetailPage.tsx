@@ -19,16 +19,36 @@ import {
   Radio,
   Layers,
   Box,
-  Check
+  Check,
+  Heart
 } from 'lucide-react';
+import { useFavorites } from '../hooks/useFavorites';
 
 export const PhoneDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: phone, isLoading, isError, error, refetch } = usePhone(id);
   const { addRecentlyViewed } = useRecentlyViewed();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [imageError, setImageError] = useState(false);
   const [isAddedToCompare, setIsAddedToCompare] = useState(false);
+
+  const isFav = phone ? isFavorite(phone.id) : false;
+
+  const handleFavoriteToggle = () => {
+    if (!phone) return;
+    toggleFavorite({
+      id: phone.id,
+      name: phone.name,
+      brand: phone.brand,
+      thumbnail: phone.image,
+      highlights: [
+        phone.display?.size || '',
+        phone.processor?.chipset || '',
+        phone.battery?.capacity || ''
+      ].filter(Boolean)
+    });
+  };
 
   // Track into recently viewed when successfully loaded
   useEffect(() => {
@@ -168,6 +188,22 @@ export const PhoneDetailPage: React.FC = () => {
                 <Scale className="w-4 h-4" />
                 <span>Compare Side-by-Side</span>
               </Link>
+              <button
+                type="button"
+                onClick={handleFavoriteToggle}
+                aria-label={isFav ? `Remove ${phone.name} from favorites` : `Add ${phone.name} to favorites`}
+                className={`min-h-[44px] inline-flex items-center gap-2 px-5 py-2.5 font-semibold text-sm rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-rose-500 ${
+                  isFav
+                    ? 'bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100'
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                }`}
+              >
+                <Heart
+                  className={`w-4 h-4 ${isFav ? 'fill-rose-500 text-rose-500' : 'text-slate-500'}`}
+                  aria-hidden="true"
+                />
+                <span>{isFav ? 'Favorited' : 'Favorite'}</span>
+              </button>
             </div>
           </div>
         </div>

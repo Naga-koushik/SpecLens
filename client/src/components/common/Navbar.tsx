@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Layers, Menu, X, Smartphone, Scale, Info } from 'lucide-react';
+import { Layers, Menu, X, Smartphone, Scale, Info, Heart } from 'lucide-react';
 import { SearchBar } from '../search/SearchBar';
+import { useFavorites } from '../../hooks/useFavorites';
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { favoritesCount } = useFavorites();
 
   // Extract comparison count from URL if present
   const params = new URLSearchParams(location.search);
@@ -79,6 +81,25 @@ export const Navbar: React.FC = () => {
             </NavLink>
 
             <NavLink
+              to="/favorites"
+              className={({ isActive }) =>
+                `flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-colors relative ${
+                  isActive
+                    ? 'bg-emerald-50 text-emerald-700'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                }`
+              }
+            >
+              <Heart className="w-4 h-4" aria-hidden="true" />
+              <span>Favorites</span>
+              {favoritesCount > 0 && (
+                <span className="ml-1 text-[11px] font-bold px-1.5 py-0.2 bg-rose-600 text-white rounded-full">
+                  {favoritesCount}
+                </span>
+              )}
+            </NavLink>
+
+            <NavLink
               to="/about"
               className={({ isActive }) =>
                 `flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-colors ${
@@ -136,6 +157,21 @@ export const Navbar: React.FC = () => {
             {compareCount > 0 && (
               <span className="text-xs font-bold px-2 py-0.5 bg-emerald-600 text-white rounded-full">
                 {compareCount}
+              </span>
+            )}
+          </NavLink>
+          <NavLink
+            to="/favorites"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center justify-between px-3 py-2.5 rounded-xl text-base font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            <div className="flex items-center gap-3">
+              <Heart className="w-5 h-5 text-rose-600" />
+              <span>Favorites</span>
+            </div>
+            {favoritesCount > 0 && (
+              <span className="text-xs font-bold px-2 py-0.5 bg-rose-600 text-white rounded-full">
+                {favoritesCount}
               </span>
             )}
           </NavLink>

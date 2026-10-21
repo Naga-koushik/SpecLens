@@ -9,6 +9,7 @@ const PhoneDetailPage = lazy(() => import('../pages/PhoneDetailPage').then((m) =
 const BrandsPage = lazy(() => import('../pages/BrandsPage').then((m) => ({ default: m.BrandsPage })));
 const BrandDetailPage = lazy(() => import('../pages/BrandDetailPage').then((m) => ({ default: m.BrandDetailPage })));
 const ComparePage = lazy(() => import('../pages/ComparePage').then((m) => ({ default: m.ComparePage })));
+const FavoritesPage = lazy(() => import('../pages/FavoritesPage').then((m) => ({ default: m.FavoritesPage })));
 const AboutPage = lazy(() => import('../pages/AboutPage').then((m) => ({ default: m.AboutPage })));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
 
@@ -69,6 +70,14 @@ const routes: RouteObject[] = [
         element: (
           <Suspense fallback={<PageLoader />}>
             <ComparePage />
+          </Suspense>
+        )
+      },
+      {
+        path: 'favorites',
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <FavoritesPage />
           </Suspense>
         )
       },

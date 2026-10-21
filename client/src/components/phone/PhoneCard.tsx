@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { PhoneSummary } from '../../types';
-import { Smartphone, Plus, Check } from 'lucide-react';
+import { Smartphone, Plus, Check, Heart } from 'lucide-react';
+import { useFavorites } from '../../hooks/useFavorites';
 
 interface PhoneCardProps {
   phone: PhoneSummary;
@@ -17,6 +18,14 @@ export const PhoneCard: React.FC<PhoneCardProps> = ({
   const [imageError, setImageError] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const isFav = isFavorite(phone.id);
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(phone);
+  };
 
   const handleCompareClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -56,6 +65,23 @@ export const PhoneCard: React.FC<PhoneCardProps> = ({
 
   return (
     <div className="group bg-white rounded-2xl border border-slate-200/80 hover:border-emerald-300 p-5 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col h-full relative">
+      {/* Favorite Button */}
+      <button
+        type="button"
+        onClick={handleFavoriteClick}
+        aria-label={isFav ? `Remove ${phone.name} from favorites` : `Add ${phone.name} to favorites`}
+        className={`absolute top-4 right-4 z-10 p-2 rounded-full backdrop-blur-sm transition-all focus-visible:ring-2 focus-visible:ring-rose-500 ${
+          isFav
+            ? 'bg-rose-50 text-rose-600 shadow-sm border border-rose-200'
+            : 'bg-white/90 text-slate-400 hover:text-rose-600 hover:bg-white shadow-xs border border-slate-200/60'
+        }`}
+      >
+        <Heart
+          className={`w-4 h-4 transition-transform active:scale-125 ${isFav ? 'fill-rose-500 stroke-rose-500' : 'stroke-current'}`}
+          aria-hidden="true"
+        />
+      </button>
+
       {/* Phone Image Container */}
       <Link
         to={`/phones/${phone.id}`}
