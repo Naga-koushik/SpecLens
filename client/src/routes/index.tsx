@@ -10,6 +10,7 @@ const BrandsPage = lazy(() => import('../pages/BrandsPage').then((m) => ({ defau
 const BrandDetailPage = lazy(() => import('../pages/BrandDetailPage').then((m) => ({ default: m.BrandDetailPage })));
 const ComparePage = lazy(() => import('../pages/ComparePage').then((m) => ({ default: m.ComparePage })));
 const FavoritesPage = lazy(() => import('../pages/FavoritesPage').then((m) => ({ default: m.FavoritesPage })));
+const FinderPage = lazy(() => import('../pages/FinderPage').then((m) => ({ default: m.FinderPage })));
 const AboutPage = lazy(() => import('../pages/AboutPage').then((m) => ({ default: m.AboutPage })));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
 
@@ -80,6 +81,10 @@ const routes: RouteObject[] = [
             <FavoritesPage />
           </Suspense>
         )
+      },
+      {
+        path: 'finder',
+        element: <Suspense fallback={<PageLoader />}><FinderPage /></Suspense>
       },
       {
         path: 'about',

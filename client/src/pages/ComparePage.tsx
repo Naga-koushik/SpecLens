@@ -6,11 +6,15 @@ import { PhoneSelectorModal } from '../components/compare/PhoneSelectorModal';
 import { ComparisonTableSkeleton } from '../components/common/Skeleton';
 import { ErrorState } from '../components/common/ErrorState';
 import { Scale, Plus, Sparkles, AlertCircle } from 'lucide-react';
+import { AssistantPanel } from '../components/assistant/AssistantPanel';
+import { AssistantSummary } from '../types';
+import { apiClient } from '../api/client';
 
 export const ComparePage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
+  const [summary, setSummary] = useState<AssistantSummary | null>(null);
 
   // Parse IDs from URL
   const idsQuery = searchParams.get('ids') || '';
@@ -43,6 +47,11 @@ export const ComparePage: React.FC = () => {
 
   const handleQuickCompare = (presetIds: string[]) => {
     setSearchParams({ ids: presetIds.join(',') });
+  };
+
+  const loadSummary = async () => {
+    const result = await apiClient<AssistantSummary>('/assistant/compare-summary', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ phoneIds: ids, language: 'en' }) });
+    setSummary(result);
   };
 
   return (
@@ -171,6 +180,7 @@ export const ComparePage: React.FC = () => {
           onClearAll={() => setSearchParams({})}
         />
       )}
+      {summary && <section className="rounded-3xl border border-emerald-200 bg-emerald-50 p-6 dark:border-emerald-900 dark:bg-emerald-950/40"><h2 className="text-xl font-bold dark:text-white">{summary.headline}</h2><div className="mt-3 grid gap-3 sm:grid-cols-2">{summary.bestFor.map((item) => <div key={`${item.need}-${item.phoneId}`} className="rounded-xl bg-white p-3 dark:bg-slate-900 dark:text-slate-100"><strong>{item.need}</strong><p className="text-sm">{item.reason}</p></div>)}</div><p className="mt-3 text-sm dark:text-slate-200">{summary.caveat}</p></section>}
 
       {/* Selection Modal */}
       <PhoneSelectorModal
@@ -182,6 +192,7 @@ export const ComparePage: React.FC = () => {
         }}
         existingIds={ids}
       />
+      {ids.length >= 2 && <AssistantPanel phoneIds={ids} compare onSummary={() => { void loadSummary(); }} />}
     </div>
   );
 };

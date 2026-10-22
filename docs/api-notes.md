@@ -138,6 +138,12 @@ Therefore:
 2. The server normalizer gracefully extracts and structures all available specifications from the device detail and search fields.
 3. If sub-endpoints are optionally requested or mocked in fixtures, the normalizer seamlessly merges them into our rich unified `Phone` model.
 
+## Phone Finder
+
+`GET /api/finder/facets` and `GET /api/finder/search` run over a local catalogue index. Finder searches never call MobileAPI.dev per request because the free tier is limited to about 50 requests per month and five requests per minute. The default catalogue is demo data derived from the checked-in mock phones; its prices are **UNVERIFIED** and are only displayed as demo data. A future snapshot catalogue can replace the mock source without changing the Finder routes.
+
+Finder criteria use compact ranges such as `size=6.3-6.8:must` and `battery=5000-:nice:4`. Must criteria determine eligibility, while Nice criteria contribute to the transparent match score. Unknown specifications receive neutral credit rather than being rejected, and near-misses are returned separately.
+
 ---
 
 ### 2.5 Device Images: `GET /devices/{id}/images/`
@@ -262,4 +268,3 @@ Our Express server maps all upstream errors to our standard internal error contr
 | Real upstream error shapes (400/404/429/500) | Status | VERIFIED against docs & simulated | UNVERIFIED against live upstream | Tested via Supertest + simulated mocked upstream |
 | Synthetic Fixtures `server/fixtures/*.json` | Fixture | VERIFIED ASSUMED (Synthetic) | N/A | Hand-crafted specs with generated SVG placeholders |
 | Live Fixtures `server/fixtures/live/*.json` | Fixture | Target directory ready | UNVERIFIED (Awaiting real key) | `fetch-fixtures.mjs` targets this directory when run |
-

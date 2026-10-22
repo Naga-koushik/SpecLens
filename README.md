@@ -69,6 +69,20 @@ Built as an academic capstone project, SpecLens features a decoupled full-stack 
 
 ## Key Features
 
+### Phone Finder
+
+Open [`/finder`](./client/src/pages/FinderPage.tsx) to describe the phone you want using sliders, screen-size bands, option counts, or plain English. “Must have” criteria define eligibility; “Nice to have” criteria are weighted and produce a transparent score. Missing specifications receive an explicit Unknown explanation instead of silently excluding a phone, and close near-misses include concrete relaxation hints.
+
+Finder searches run against the in-memory local catalogue rather than calling MobileAPI.dev for every search. The default catalogue is **DEMO DATA**; catalogue prices are **UNVERIFIED** and are hidden when price coverage is too sparse. A live snapshot can be generated only when `MOBILEAPI_KEY` is configured.
+
+### SpecLens Assistant
+
+The phone and comparison pages include an **Ask AI** panel. In the default `AI_PROVIDER=mock` mode it works offline with deterministic demo responses. The server builds prompts from normalized phone specifications only; keys and prompts never reach the browser. Questions are bounded, rate-limited, streamed over SSE, and accompanied by the fields used.
+
+To use the local Qwen model, copy [`server/.env.example`](./server/.env.example) to `server/.env`, install Ollama, run `ollama pull qwen3:8b`, and set `AI_PROVIDER=ollama`, `OLLAMA_MODEL=qwen3:8b`, and `LLM_BASE_URL=http://127.0.0.1:11434/v1`. Use `OLLAMA_MODEL=qwen3:4b` when the 8B model is too large. The server health endpoint (`http://localhost:5000/api/health`) reports Ollama reachability, model availability and a short generation smoke check. For another OpenAI-compatible server, set `AI_PROVIDER=openai-compatible` and its `LLM_BASE_URL`; provider credentials stay in `LLM_API_KEY`. The provider boundary in [`server/src/services/llm/`](./server/src/services/llm) makes replacing the adapter straightforward. The browser never connects directly to Ollama.
+
+The assistant supports English, Hindi, Telugu, Tamil, Kannada, Malayalam, Bengali, Marathi, Gujarati, Punjabi, Odia and Urdu. UI translations and language detection are structural and should be reviewed by native speakers. Do not enter personal information: questions may be sent to a third-party provider when a hosted adapter is selected.
+
 1. **Home Screen (`/`)**:
    - Hero search bar with debounced autocomplete (ARIA combobox with keyboard arrow/enter navigation).
    - Curated popular smartphones grid.
@@ -297,4 +311,3 @@ All server errors conform to:
 
 - **No Database / Authentication**: SpecLens is intentionally stateless with zero database or user accounts. User preferences (favorites, recently viewed, theme) are maintained purely client-side via `localStorage`.
 - **External Free Tier Quota**: MobileAPI.dev free tier provides 50 requests/month and 5 requests/minute. Production deployments should maintain caching or upgrade provider plans.
-

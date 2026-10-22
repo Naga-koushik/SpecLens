@@ -69,6 +69,7 @@ export interface Phone {
   operatingSystem: string | null;
   network: NetworkSpec | null;
   connectivity: ConnectivitySpec | null;
+  price?: { amount: number; currency: string; raw: string } | null;
 }
 
 export interface PhoneSummary {
@@ -120,7 +121,9 @@ export type ErrorCode =
   | 'RATE_LIMITED'
   | 'UPSTREAM_UNAVAILABLE'
   | 'UPSTREAM_TIMEOUT'
-  | 'INTERNAL_ERROR';
+  | 'INTERNAL_ERROR'
+  | 'AI_UNAVAILABLE'
+  | 'AI_TIMEOUT';
 
 export interface RawDeviceInput {
   id?: string | number | null;
@@ -162,6 +165,40 @@ export interface RawDeviceInput {
   sim?: string | null;
   connectivity?: Partial<ConnectivitySpec> | null;
   wlan?: string | null;
+  misc?: { price?: string | null } | null;
+}
+
+export type FinderMode = 'must' | 'nice';
+export interface FinderRange {
+  min?: number;
+  max?: number;
+  mode: FinderMode;
+  weight: number;
+}
+export interface FinderSet {
+  anyOf: string[];
+  mode: FinderMode;
+  weight: number;
+}
+export interface FinderBucket {
+  ids: string[];
+  mode: FinderMode;
+  weight: number;
+}
+export interface FinderCriteria {
+  size?: FinderRange;
+  sizeBuckets?: FinderBucket;
+  battery?: FinderRange;
+  ram?: FinderRange;
+  storage?: FinderRange;
+  refresh?: FinderRange;
+  weight?: FinderRange;
+  year?: FinderRange;
+  price?: FinderRange;
+  display?: FinderSet;
+  brand?: FinderSet;
+  os?: FinderSet;
+  hideMissing?: boolean;
 }
 
 export type DeviceInput = RawDeviceInput;
@@ -172,4 +209,3 @@ export interface ApiErrorResponse {
     message: string;
   };
 }
-

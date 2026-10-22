@@ -1,4 +1,5 @@
 import { Phone, PhoneSummary, DeviceInput } from '../types/index.js';
+import { env } from '../config/env.js';
 
 /**
  * Pure function to safely clean and nullify empty or placeholder strings.
@@ -9,7 +10,16 @@ function cleanString(val: unknown): string | null {
   if (!str || str.toLowerCase() === 'not available' || str.toLowerCase() === 'n/a' || str === '-') {
     return null;
   }
+
   return str;
+}
+function parsePrice(raw: string | null | undefined): Phone['price'] {
+  if (!raw) return null;
+  const amountMatch = raw.replace(/,/g, '').match(/(?:₹|INR|Rs\.?|USD|\$)?\s*(\d+(?:\.\d+)?)/i);
+  if (!amountMatch) return null;
+  const amount = Number(amountMatch[1]);
+  if (!Number.isFinite(amount) || amount <= 0) return null;
+  return { amount, currency: /(\$|USD)/i.test(raw) ? 'USD' : env.FINDER_CURRENCY, raw };
 }
 
 /**
@@ -79,7 +89,7 @@ export function normalizePhone(raw: DeviceInput): Phone {
       brand = cleanString(raw.manufacturer) ?? brand;
     } else if (typeof raw.manufacturer === 'object' && raw.manufacturer !== null && typeof raw.manufacturer.name === 'string') {
       brand = cleanString(raw.manufacturer.name) ?? brand;
-    }
+    };
   }
 
   // Resolve Image (support image, image_url, thumbnail, base64)
@@ -99,7 +109,7 @@ export function normalizePhone(raw: DeviceInput): Phone {
       image = `data:image/jpeg;base64,${rawImage.trim()}`;
     } else {
       image = rawImage;
-    }
+    };
   }
 
   // Release Date
@@ -262,7 +272,8 @@ export function normalizePhone(raw: DeviceInput): Phone {
     charging,
     operatingSystem,
     network,
-    connectivity
+    connectivity,
+    price: parsePrice(raw.misc?.price)
   };
 }
 
@@ -294,4 +305,3 @@ export function normalizePhoneSummary(raw: DeviceInput): PhoneSummary {
     ram: phone.memory?.ramOptions ?? null
   };
 }
-

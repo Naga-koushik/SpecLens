@@ -69,6 +69,7 @@ export interface Phone {
   operatingSystem: string | null;
   network: NetworkSpec | null;
   connectivity: ConnectivitySpec | null;
+  price?: { amount: number; currency: string; raw: string } | null;
 }
 
 export interface PhoneSummary {
@@ -127,6 +128,46 @@ export interface ApiErrorResponse {
     code: ErrorCode;
     message: string;
   };
+}
+
+export type FinderMode = 'must' | 'nice';
+export interface FinderRange { min?: number; max?: number; mode: FinderMode; weight: number; }
+export interface FinderSet { anyOf: string[]; mode: FinderMode; weight: number; }
+export interface FinderBucket { ids: string[]; mode: FinderMode; weight: number; }
+export interface FinderCriteria {
+  size?: FinderRange; sizeBuckets?: FinderBucket; battery?: FinderRange; ram?: FinderRange; storage?: FinderRange;
+  refresh?: FinderRange; weight?: FinderRange; year?: FinderRange; price?: FinderRange;
+  display?: FinderSet; brand?: FinderSet; os?: FinderSet; hideMissing?: boolean;
+}
+export interface FinderExplanation { criterion: string; status: 'matched' | 'missed' | 'unknown'; actual: string; asked: string; }
+export interface FinderResult { phone: PhoneSummary; score: number; explanations: FinderExplanation[]; summary: string; }
+export interface FinderResponse {
+  total: number; results: FinderResult[]; nearMisses: FinderResult[];
+  hints: Array<{ criterion: string; value: number | string; count: number; label: string }>;
+  appliedCriteria: FinderCriteria; page: number; hasMore: boolean; demoData?: boolean;
+}
+export interface FinderFacets {
+  total: number;
+  brand: Record<string, number>;
+  display: Record<string, number>;
+  histograms: Record<string, Record<string, number>>;
+  ranges?: Record<string, { min: number; max: number }>;
+  priceUsable: boolean;
+  demoData: boolean;
+}
+export interface AssistantMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  sources?: string[];
+  language?: string;
+  estimate?: boolean;
+}
+export interface AssistantSummary {
+  headline: string;
+  bestFor: Array<{ need: string; phoneId: string; reason: string }>;
+  tradeOffs: string[];
+  caveat: string;
+  demo?: boolean;
 }
 
 export interface ComparisonRowItem {

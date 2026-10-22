@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Layers, Menu, X, Smartphone, Scale, Info, Heart, Sun, Moon } from 'lucide-react';
+import { Layers, Menu, X, Smartphone, Scale, Info, Heart, Sun, Moon, Sparkles } from 'lucide-react';
 import { SearchBar } from '../search/SearchBar';
 import { useFavorites } from '../../hooks/useFavorites';
 import { useTheme } from '../../hooks/useTheme';
@@ -61,6 +61,9 @@ export const Navbar: React.FC = () => {
             >
               <Layers className="w-4 h-4" aria-hidden="true" />
               <span>Brands</span>
+            </NavLink>
+            <NavLink to="/finder" className={({ isActive }) => `flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold ${isActive ? 'bg-emerald-50 text-emerald-700' : 'text-slate-600 hover:bg-slate-50'}`}>
+              <Sparkles className="w-4 h-4" aria-hidden="true" /><span>Find my phone</span>
             </NavLink>
 
             <NavLink

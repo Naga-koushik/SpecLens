@@ -12,6 +12,14 @@ const envSchema = z.object({
   CACHE_SEARCH_TTL_MS: z.string().default('300000').transform((val) => parseInt(val, 10)),
   CACHE_DETAIL_TTL_MS: z.string().default('3600000').transform((val) => parseInt(val, 10)),
   CACHE_BRANDS_TTL_MS: z.string().default('86400000').transform((val) => parseInt(val, 10)),
+  FINDER_CURRENCY: z.string().default('INR'),
+  AI_PROVIDER: z.enum(['mock', 'anthropic', 'gemini', 'ollama', 'openai-compatible']).default('mock'),
+  LLM_API_KEY: z.string().optional().default(''),
+  LLM_MODEL: z.string().default('qwen3:8b'),
+  OLLAMA_MODEL: z.string().default('qwen3:8b'),
+  LLM_BASE_URL: z.string().optional().default(''),
+  AI_TIMEOUT_MS: z.string().default('15000').transform((val) => parseInt(val, 10)),
+  AI_MAX_OUTPUT_TOKENS: z.string().default('500').transform((val) => parseInt(val, 10)),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);

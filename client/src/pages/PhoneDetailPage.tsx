@@ -26,6 +26,7 @@ import {
 import { useFavorites } from '../hooks/useFavorites';
 import { useSimilarPhones } from '../hooks/useSimilarPhones';
 import { PhoneCard } from '../components/phone/PhoneCard';
+import { AssistantPanel } from '../components/assistant/AssistantPanel';
 
 export const PhoneDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -375,6 +376,7 @@ export const PhoneDetailPage: React.FC = () => {
           </div>
         </section>
       )}
+      <AssistantPanel phoneIds={[String(phone.id)]} />
     </div>
   );
 };

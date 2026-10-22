@@ -11,6 +11,8 @@ import healthRoutes from './routes/health.js';
 import phonesRoutes from './routes/phones.js';
 import brandsRoutes from './routes/brands.js';
 import compareRoutes from './routes/compare.js';
+import finderRoutes from './routes/finder.js';
+import assistantRoutes from './routes/assistant.js';
 
 export function createApp() {
   const app = express();
@@ -23,7 +25,7 @@ export function createApp() {
   app.use(
     cors({
       origin: allowedOrigins.length === 1 ? allowedOrigins[0] : allowedOrigins,
-      methods: ['GET'],
+      methods: ['GET', 'POST'],
       allowedHeaders: ['Content-Type', 'Authorization']
     })
   );
@@ -32,7 +34,7 @@ export function createApp() {
   app.use(compression());
 
   // JSON Body Parser
-  app.use(express.json());
+  app.use(express.json({ limit: '32kb' }));
 
   // Safe Request Logging (never log sensitive headers or query keys)
   if (env.NODE_ENV !== 'test') {
@@ -58,6 +60,8 @@ export function createApp() {
   app.use('/api', phonesRoutes);
   app.use('/api', brandsRoutes);
   app.use('/api', compareRoutes);
+  app.use('/api', finderRoutes);
+  app.use('/api', assistantRoutes);
 
   // 404 for unknown API routes
   app.use('/api/*', (_req, res) => {
